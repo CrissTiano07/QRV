@@ -1,1128 +1,222 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema CEOPE - Via Livre v1.1</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 30px;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-        }
-        .main-container {
-            max-width: 1200px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-        .system-header {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .system-header h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 600;
-        }
-        .system-header p {
-            margin: 10px 0 0 0;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        .module-container {
-            background-color: #ffffff;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            border: 1px solid #e0e0e0;
-        }
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .tab {
-            padding: 12px 24px;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            color: #666;
-            transition: all 0.3s;
-        }
-        .tab.active {
-            color: #4CAF50;
-            border-bottom-color: #4CAF50;
-        }
-        .tab:hover {
-            color: #4CAF50;
-            background-color: #f5f5f5;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .module-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        .module-header h2 {
-            margin: 0;
-            color: #1a3c34;
-            font-size: 24px;
-            font-weight: 600;
-        }
-        .module-header .icon {
-            font-size: 28px;
-            color: #4CAF50;
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .feature-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
-        }
-        .feature-card h3 {
-            margin: 0 0 10px 0;
-            color: #1a3c34;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .feature-card p {
-            margin: 0;
-            color: #666;
-            font-size: 14px;
-        }
-        .form-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2196F3;
-        }
-        .form-section h3 {
-            margin: 0 0 15px 0;
-            color: #1a3c34;
-            font-size: 18px;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #333;
-        }
-        .form-group input, .form-group select, .form-group textarea {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        }
-        .form-group input[type="date"] {
-            cursor: pointer;
-        }
-        .workers-section {
-            background: #fff3e0;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ff9800;
-        }
-        .worker-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr 2fr auto;
-            gap: 10px;
-            align-items: end;
-            margin-bottom: 10px;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-            border: 1px solid #e0e0e0;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-        }
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: #45a049;
-            transform: translateY(-1px);
-        }
-        .btn-secondary {
-            background-color: #2196F3;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #1976D2;
-            transform: translateY(-1px);
-        }
-        .btn-warning {
-            background-color: #ff9800;
-            color: white;
-        }
-        .btn-warning:hover {
-            background-color: #f57c00;
-            transform: translateY(-1px);
-        }
-        .btn-danger {
-            background-color: #f44336;
-            color: white;
-        }
-        .btn-danger:hover {
-            background-color: #d32f2f;
-            transform: translateY(-1px);
-        }
-        .btn-success {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .btn-success:hover {
-            background-color: #45a049;
-            transform: translateY(-1px);
-        }
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .total-display {
-            background: #e8f5e8;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 15px 0;
-            border: 2px solid #4CAF50;
-        }
-        .total-display h3 {
-            margin: 0;
-            color: #2e7d32;
-            font-size: 20px;
-        }
-        .upload-area {
-            border: 2px dashed #4CAF50;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            background: #f8fff8;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-        .upload-area:hover {
-            background: #f0fff0;
-            border-color: #45a049;
-        }
-        .upload-area.dragover {
-            background: #e8f5e8;
-            border-color: #2e7d32;
-        }
-        .file-input {
-            display: none;
-        }
-        .upload-icon {
-            font-size: 48px;
-            color: #4CAF50;
-            margin-bottom: 15px;
-        }
-        .upload-text {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-        .file-info {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #2196F3;
-        }
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .worker-row {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            .actions-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>QRV Mobile — Operacional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --laranja:#F97316;
+      --laranja-esc:#ea580c;
+      --azul:#2563EB;
+      --bg:#FFFFFF;
+      --page-bg:#F9FAFB;
+      --texto:#0F172A;
+      --borda:#CBD5E1;
+      --touch-size:52px;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--page-bg);color:var(--texto);-webkit-tap-highlight-color:transparent}
+    .app{max-width:520px;margin:0 auto;padding:12px;box-sizing:border-box}
+    .card{background:var(--bg);border-radius:14px;padding:16px;margin-top:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+    h1{font-size:18px;margin:0 0 8px;color:var(--laranja)}
+    label{display:block;font-size:13px;margin-top:10px;font-weight:600}
+    input,select,textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid var(--borda);font-size:15px;margin-top:6px}
+    textarea{min-height:110px;resize:vertical}
+
+    /* Tripulantes list */
+    .tripulantes{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+    .add-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .add-btn{background:none;border:none;color:var(--azul);font-weight:600;font-size:14px;padding:8px}
+
+    /* fixed send area */
+    .send-area{position:fixed;left:0;right:0;bottom:env(safe-area-inset-bottom,0);padding:12px;background:linear-gradient(0deg, rgba(249,250,251,0.95), rgba(249,250,251,0.6));box-shadow:0 -6px 16px rgba(2,6,23,0.06);display:flex;gap:8px;align-items:center}
+    .primary-btn{flex:1;background:var(--laranja);color:#fff;border:none;border-radius:12px;padding:14px;min-height:var(--touch-size);font-weight:700;font-size:16px}
+    .secondary-btn{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:12px;min-height:var(--touch-size);font-weight:600}
+
+    /* small helpers */
+    .small{font-size:13px;color:#475569}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;background:var(--laranja);color:#fff;padding:10px 14px;border-radius:10px;display:none}
+    .toast.show{display:block}
+
+    @media (prefers-color-scheme:dark){
+      :root{--bg:#0b1220;--page-bg:#071126;--texto:#e6eef8;--borda:#1f2937}
+      .card{box-shadow:none}
+      .send-area{background:linear-gradient(0deg, rgba(2,6,23,0.95), rgba(2,6,23,0.7));}
+    }
+
+    @media (min-width:520px){
+      body{background:linear-gradient(90deg,#f8fafc,#fff)}
+      .app{margin-top:18px}
+      .card{padding:20px}
+    }
+  </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="system-header">
-            <h1><i class="fas fa-clipboard-list"></i> Sistema CEOPE - Via Livre</h1>
-            <p>Geração de Escalas e Relatórios Operacionais - Versão 1.1</p>
+  <div class="app">
+    <div class="card">
+      <h1>QRV Operacional</h1>
+      <form id="qrvForm" autocomplete="off">
+        <label for="vt">Viatura (VT)</label>
+        <input id="vt" name="vt" type="text" inputmode="numeric" placeholder="Ex: 215" required>
+
+        <label for="condutor">Condutor</label>
+        <input id="condutor" name="condutor" type="text" placeholder="Nome do condutor" required>
+
+        <label>Tripulantes</label>
+        <div id="tripulantes" class="tripulantes">
+          <input class="trip-input" placeholder="Tripulante 01" required>
+        </div>
+        <div class="add-row">
+          <button type="button" id="addTrip" class="add-btn">+ Adicionar</button>
+          <div class="small">Toque para adicionar até 6</div>
         </div>
 
-        <div class="module-container">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('escalas')">
-                    <i class="fas fa-calendar-alt"></i> Gerador de Escalas
-                </button>
-                <button class="tab" onclick="showTab('relatorio')">
-                    <i class="fas fa-file-alt"></i> Relatório Operacional
-                </button>
-            </div>
+        <label for="qru">QRU</label>
+        <select id="qru" required>
+          <option value="">Selecione...</option>
+          <option>CONTROLE DE TRÁFEGO</option>
+          <option>APOIO OPERACIONAL</option>
+          <option>ACIDENTE</option>
+          <option>RETIRADA DE OBSTÁCULO</option>
+          <option>OUTROS</option>
+        </select>
 
-            <!-- Aba Gerador de Escalas -->
-            <div id="escalas" class="tab-content active">
-                <div class="module-header">
-                    <i class="fas fa-calendar-alt icon"></i>
-                    <h2>Gerador de Escalas de Trabalho</h2>
-                </div>
+        <label for="qth">QTH</label>
+        <input id="qth" name="qth" type="text" placeholder="Ex: RUA 01 x RUA 02" required>
 
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3><i class="fas fa-file-excel"></i> Planilha Excel</h3>
-                        <p>Gera automaticamente planilha de escala para download</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3><i class="fas fa-calculator"></i> Contagem Inteligente</h3>
-                        <p>Conta trabalhadores excluindo supervisores do topo</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3><i class="fab fa-whatsapp"></i> Texto WhatsApp</h3>
-                        <p>Formata texto pronto para envio no WhatsApp</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3><i class="fas fa-upload"></i> Upload Excel</h3>
-                        <p>Importa dados de planilhas existentes</p>
-                    </div>
-                </div>
-
-                <!-- Upload de Excel -->
-                <div class="form-section">
-                    <h3><i class="fas fa-upload"></i> Importar Planilha Excel</h3>
-                    <div class="upload-area" onclick="document.getElementById('excelFile').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                        <div class="upload-icon">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                        </div>
-                        <div class="upload-text">
-                            Clique aqui ou arraste um arquivo Excel (.xlsx, .xls)
-                        </div>
-                        <button type="button" class="btn btn-secondary">
-                            <i class="fas fa-folder-open"></i> Selecionar Arquivo
-                        </button>
-                        <input type="file" id="excelFile" class="file-input" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
-                    </div>
-                    <div id="fileInfo" class="file-info" style="display: none;">
-                        <strong>Arquivo selecionado:</strong> <span id="fileName"></span><br>
-                        <strong>Tamanho:</strong> <span id="fileSize"></span><br>
-                        <button type="button" class="btn btn-primary" onclick="processExcelFile()">
-                            <i class="fas fa-cogs"></i> Processar Arquivo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Dados da Escala -->
-                <div class="form-section">
-                    <h3><i class="fas fa-info-circle"></i> Dados da Escala</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="dataEscala">Data da Escala: *</label>
-                            <input type="date" id="dataEscala" required onclick="this.showPicker()">
-                        </div>
-                        <div class="form-group">
-                            <label for="turno">Turno: *</label>
-                            <select id="turno" required>
-                                <option value="">Selecione o turno</option>
-                                <option value="Madrugada">Madrugada</option>
-                                <option value="Manhã">Manhã</option>
-                                <option value="Tarde">Tarde</option>
-                                <option value="Noite">Noite</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="supervisoresPrincipais">Supervisores Principais (não contam): *</label>
-                            <input type="text" id="supervisoresPrincipais" value="SUPERVISOR 1, SUPERVISOR 2" readonly style="background-color: #f5f5f5; color: #666;">
-                        </div>
-                        <div class="form-group">
-                            <label for="supervisorAuxiliar">Supervisor Auxiliar (conta): *</label>
-                            <input type="text" id="supervisorAuxiliar" placeholder="Digite o nome do supervisor auxiliar" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="monitorCentral">Monitor da Central:</label>
-                            <input type="text" id="monitorCentral" placeholder="Nome do monitor">
-                        </div>
-                        <div class="form-group">
-                            <label>Total de Trabalhadores:</label>
-                            <div class="total-display">
-                                <h3 id="totalTrabalhadores">0</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trabalhadores -->
-                <div class="workers-section">
-                    <h3><i class="fas fa-users"></i> Distribuição de Trabalhadores</h3>
-                    <div id="workersContainer">
-                        <div class="worker-row">
-                            <div class="form-group">
-                                <label>Região:</label>
-                                <select class="worker-region">
-                                    <option value="">Selecione</option>
-                                    <option value="Central">Central</option>
-                                    <option value="Norte">Norte</option>
-                                    <option value="Sul">Sul</option>
-                                    <option value="Leste">Leste</option>
-                                    <option value="Oeste">Oeste</option>
-                                    <option value="Pátio">Pátio</option>
-                                    <option value="Ronda">Ronda</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Nomes dos Trabalhadores:</label>
-                                <input type="text" class="worker-names" placeholder="Digite os nomes separados por vírgula">
-                            </div>
-                            <div class="form-group">
-                                <label>Função/Posto:</label>
-                                <input type="text" class="worker-function" placeholder="Ex: Operador, Vigilante">
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-danger" onclick="removeWorker(this)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="addWorker()">
-                        <i class="fas fa-plus"></i> Adicionar Trabalhador
-                    </button>
-                </div>
-
-                <!-- Ações -->
-                <div class="actions-grid">
-                    <button type="button" class="btn btn-success" onclick="saveEscala()">
-                        <i class="fas fa-save"></i> Salvar Escala
-                    </button>
-                    <button type="button" class="btn btn-warning" onclick="loadEscala()">
-                        <i class="fas fa-folder-open"></i> Carregar Escala
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="generateExcel()">
-                        <i class="fas fa-file-excel"></i> Gerar Excel da Escala
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="generateWhatsApp()">
-                        <i class="fab fa-whatsapp"></i> Gerar Texto WhatsApp
-                    </button>
-                    <button type="button" class="btn btn-warning" onclick="previewEscala()">
-                        <i class="fas fa-eye"></i> Pré-visualizar
-                    </button>
-                </div>
-            </div>
-
-            <!-- Aba Relatório Operacional -->
-            <div id="relatorio" class="tab-content">
-                <div class="module-header">
-                    <i class="fas fa-file-alt icon"></i>
-                    <h2>Relatório Operacional de Turno</h2>
-                </div>
-
-                <div class="form-section">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="dataRelatorio">Data: *</label>
-                            <input type="date" id="dataRelatorio" required onclick="this.showPicker()">
-                        </div>
-                        <div class="form-group">
-                            <label for="turnoRelatorio">Turno: *</label>
-                            <select id="turnoRelatorio" required>
-                                <option value="">Selecione o turno</option>
-                                <option value="Madrugada">Madrugada</option>
-                                <option value="Manhã">Manhã</option>
-                                <option value="Tarde">Tarde</option>
-                                <option value="Noite">Noite</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="supervisor">Supervisor (Nome e Telefone): *</label>
-                            <input type="text" id="supervisor" placeholder="Digite o nome e telefone do supervisor" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="totalOperadores">Total de Operadores: *</label>
-                            <input type="number" id="totalOperadores" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="internos">Internos:</label>
-                            <input type="number" id="internos" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="externos">Externos:</label>
-                            <input type="number" id="externos" min="0">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3>Divisão das Operações</h3>
-                    <div class="form-group">
-                        <label for="central">01. Central:</label>
-                        <textarea id="central" rows="3" placeholder="Digite os nomes dos operadores"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="postosFixos">02. Postos Fixos:</label>
-                        <textarea id="postosFixos" rows="3" placeholder="Digite os postos e operadores"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="equipesVolantes">03. Equipes Volantes:</label>
-                        <textarea id="equipesVolantes" rows="3" placeholder="Digite as equipes volantes"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="observacoes">Observações:</label>
-                        <textarea id="observacoes" rows="4" placeholder="Digite observações adicionais"></textarea>
-                    </div>
-                </div>
-
-                <div class="actions-grid">
-                    <button type="button" class="btn btn-success" onclick="salvarRascunho()">
-                        <i class="fas fa-save"></i> Salvar Rascunho
-                    </button>
-                    <button type="button" class="btn btn-warning" onclick="carregarRascunho()">
-                        <i class="fas fa-folder-open"></i> Carregar Rascunho
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="gerarPDF()">
-                        <i class="fas fa-file-pdf"></i> Gerar PDF
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="gerarTextoWhatsApp()">
-                        <i class="fab fa-whatsapp"></i> Gerar Texto WhatsApp
-                    </button>
-                </div>
-            </div>
-        </div>
+        <div style="height:84px"></div> <!-- espaço para o botão fixo -->
+      </form>
     </div>
+  </div>
 
-    <script>
-        let selectedFile = null;
+  <div class="send-area" role="region" aria-label="Enviar QRV">
+    <button id="previewBtn" class="secondary-btn" aria-label="Pré-visualizar">Pré-visualizar</button>
+    <button id="sendBtn" class="primary-btn" aria-label="Enviar para WhatsApp">Enviar (Abrir WhatsApp)</button>
+  </div>
 
-        // Navegação entre abas
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script defer>
+    (function(){
+      const form = document.getElementById('qrvForm');
+      const vt = document.getElementById('vt');
+      const condutor = document.getElementById('condutor');
+      const qru = document.getElementById('qru');
+      const qth = document.getElementById('qth');
+      const tripContainer = document.getElementById('tripulantes');
+      const addTrip = document.getElementById('addTrip');
+      const sendBtn = document.getElementById('sendBtn');
+      const previewBtn = document.getElementById('previewBtn');
+      const toast = document.getElementById('toast');
+
+      // foco inicial no primeiro campo vazio
+      window.addEventListener('load', ()=>{
+        try{ const first = document.querySelector('input[required]'); if(first) first.focus(); }catch(e){}
+      });
+
+      // adicionar tripulante (até 6)
+      addTrip.addEventListener('click', ()=>{
+        const current = tripContainer.querySelectorAll('.trip-input').length;
+        if(current >= 6){ showToast('Máx. 6 tripulantes'); return; }
+        const input = document.createElement('input');
+        input.className='trip-input';
+        input.placeholder = `Tripulante ${current+1}`;
+        tripContainer.appendChild(input);
+        input.focus();
+      });
+
+      // gerar texto do QRV
+      function gerarTexto(){
+        const vtVal = vt.value.trim();
+        const cond = condutor.value.trim();
+        const qruVal = qru.value;
+        const qthVal = qth.value.trim();
+        const trip = Array.from(tripContainer.querySelectorAll('.trip-input')).map(i=>i.value.trim()).filter(Boolean);
+
+        return `VT ${vtVal}\n${cond} (Condutor)\n${trip.join('\n')}\nQRU: ${qruVal}\nQTH: ${qthVal}`;
+      }
+
+      // valida básica
+      function validar(){
+        if(!vt.value.trim() || !condutor.value.trim() || !qru.value || !qth.value.trim()){
+          showToast('Preencha todos os campos obrigatórios');
+          return false;
         }
+        return true;
+      }
 
-        // Upload de Excel - Drag and Drop
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
+      // mostrar toast
+      function showToast(msg,ms=1800){
+        toast.textContent = msg; toast.classList.add('show');
+        setTimeout(()=>toast.classList.remove('show'), ms);
+      }
+
+      // tentativa de abrir o app WhatsApp via deep link; se falhar, copia texto e orienta abrir app manualmente
+      function enviarParaWhatsApp(texto){
+        const encoded = encodeURIComponent(texto);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const appLink = `whatsapp://send?text=${encoded}`;
+
+        // tentativa - alterar location (abre app se instalado)
+        let opened = false;
+        const start = Date.now();
+        // cria iframe para alguns browsers que bloqueiam location change
+        const fallback = setTimeout(()=>{
+          // se após 700ms ainda não mudou de contexto, assumimos falha
+          navigator.clipboard.writeText(texto).then(()=>{
+            showToast('WhatsApp não detectado — texto copiado. Abra o app e cole.');
+            try{ navigator.vibrate?.(100); }catch(e){}
+          }).catch(()=>{
+            showToast('Não foi possível abrir o app. Copiado para a área de transferência.');
+          });
+        },700);
+
+        // Tenta abrir via location (recomendado)
+        try{
+          window.location.href = appLink;
+        }catch(e){
+          // fallback
+          clearTimeout(fallback);
+          navigator.clipboard.writeText(texto).then(()=> showToast('Texto copiado. Abra o WhatsApp e cole.'));
         }
+      }
 
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('dragover');
+      // Pré-visualizar em modal simples (alert nativo para ser rápido)
+      previewBtn.addEventListener('click', ()=>{
+        if(!validar()) return;
+        const txt = gerarTexto();
+        // usam alert nativo por ser rápido e sem overhead
+        alert(txt);
+      });
+
+      // Envio direto (mínimos toques) — abre o app com a mensagem pronta
+      sendBtn.addEventListener('click', ()=>{
+        if(!validar()) return;
+        const txt = gerarTexto();
+        enviarParaWhatsApp(txt);
+      });
+
+      // submit via Enter em campos - envio rápido
+      form.addEventListener('submit', (e)=>{ e.preventDefault(); sendBtn.click(); });
+
+      // tecla Enter salta para o próximo campo
+      form.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){
+          const focusable = Array.from(form.querySelectorAll('input,select,textarea'));
+          const idx = focusable.indexOf(document.activeElement);
+          if(idx >=0 && idx < focusable.length-1){
+            e.preventDefault(); focusable[idx+1].focus();
+          }
         }
+      });
 
-        function handleDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFile(files[0]);
-            }
-        }
+      // Previne abertura em new tab a partir de links (não há links externos)
+      // Não há histórico/backup para manter a versão enxuta (pedido do usuário)
 
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (file) {
-                handleFile(file);
-            }
-        }
-
-        function handleFile(file) {
-            if (!file.name.match(/\.(xlsx|xls)$/)) {
-                alert('Por favor, selecione um arquivo Excel (.xlsx ou .xls)');
-                return;
-            }
-
-            selectedFile = file;
-            document.getElementById('fileName').textContent = file.name;
-            document.getElementById('fileSize').textContent = formatFileSize(file.size);
-            document.getElementById('fileInfo').style.display = 'block';
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        function processExcelFile() {
-            if (!selectedFile) {
-                alert('Nenhum arquivo selecionado');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-                    
-                    // Processar dados do Excel
-                    processExcelData(jsonData);
-                    alert('Arquivo processado com sucesso!');
-                } catch (error) {
-                    alert('Erro ao processar arquivo: ' + error.message);
-                }
-            };
-            reader.readAsArrayBuffer(selectedFile);
-        }
-
-        function processExcelData(data) {
-            // Limpar trabalhadores existentes
-            const container = document.getElementById('workersContainer');
-            container.innerHTML = '';
-
-            // Processar dados e criar trabalhadores
-            for (let i = 1; i < data.length; i++) { // Pular cabeçalho
-                const row = data[i];
-                if (row && row.length > 0) {
-                    addWorkerFromData(row[0] || '', row[1] || '', row[2] || '');
-                }
-            }
-
-            updateTotal();
-        }
-
-        function addWorkerFromData(region, names, func) {
-            const container = document.getElementById('workersContainer');
-            const workerRow = document.createElement('div');
-            workerRow.className = 'worker-row';
-            workerRow.innerHTML = `
-                <div class="form-group">
-                    <label>Região:</label>
-                    <select class="worker-region">
-                        <option value="">Selecione</option>
-                        <option value="Central" ${region === 'Central' ? 'selected' : ''}>Central</option>
-                        <option value="Norte" ${region === 'Norte' ? 'selected' : ''}>Norte</option>
-                        <option value="Sul" ${region === 'Sul' ? 'selected' : ''}>Sul</option>
-                        <option value="Leste" ${region === 'Leste' ? 'selected' : ''}>Leste</option>
-                        <option value="Oeste" ${region === 'Oeste' ? 'selected' : ''}>Oeste</option>
-                        <option value="Pátio" ${region === 'Pátio' ? 'selected' : ''}>Pátio</option>
-                        <option value="Ronda" ${region === 'Ronda' ? 'selected' : ''}>Ronda</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Nomes dos Trabalhadores:</label>
-                    <input type="text" class="worker-names" placeholder="Digite os nomes separados por vírgula" value="${names}" onchange="updateTotal()">
-                </div>
-                <div class="form-group">
-                    <label>Função/Posto:</label>
-                    <input type="text" class="worker-function" placeholder="Ex: Operador, Vigilante" value="${func}">
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-danger" onclick="removeWorker(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            container.appendChild(workerRow);
-        }
-
-        // Gerenciamento de trabalhadores
-        function addWorker() {
-            const container = document.getElementById('workersContainer');
-            const workerRow = document.createElement('div');
-            workerRow.className = 'worker-row';
-            workerRow.innerHTML = `
-                <div class="form-group">
-                    <label>Região:</label>
-                    <select class="worker-region">
-                        <option value="">Selecione</option>
-                        <option value="Central">Central</option>
-                        <option value="Norte">Norte</option>
-                        <option value="Sul">Sul</option>
-                        <option value="Leste">Leste</option>
-                        <option value="Oeste">Oeste</option>
-                        <option value="Pátio">Pátio</option>
-                        <option value="Ronda">Ronda</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Nomes dos Trabalhadores:</label>
-                    <input type="text" class="worker-names" placeholder="Digite os nomes separados por vírgula" onchange="updateTotal()">
-                </div>
-                <div class="form-group">
-                    <label>Função/Posto:</label>
-                    <input type="text" class="worker-function" placeholder="Ex: Operador, Vigilante">
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-danger" onclick="removeWorker(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            container.appendChild(workerRow);
-            updateTotal();
-        }
-
-        function removeWorker(button) {
-            button.closest('.worker-row').remove();
-            updateTotal();
-        }
-
-        // Atualizar total de trabalhadores
-        function updateTotal() {
-            let total = 0;
-            
-            // Contar supervisor auxiliar se preenchido
-            const supervisorAuxiliar = document.getElementById('supervisorAuxiliar').value.trim();
-            if (supervisorAuxiliar) {
-                total += 1;
-            }
-            
-            // Contar trabalhadores
-            const workerNames = document.querySelectorAll('.worker-names');
-            workerNames.forEach(input => {
-                const names = input.value.trim();
-                if (names) {
-                    const nameCount = names.split(',').filter(name => name.trim()).length;
-                    total += nameCount;
-                }
-            });
-            
-            document.getElementById('totalTrabalhadores').textContent = total;
-        }
-
-        // Event listeners para atualizar total
-        document.getElementById('supervisorAuxiliar').addEventListener('input', updateTotal);
-
-        // Salvar e carregar escala
-        function saveEscala() {
-            const escala = {
-                data: document.getElementById('dataEscala').value,
-                turno: document.getElementById('turno').value,
-                supervisorAuxiliar: document.getElementById('supervisorAuxiliar').value,
-                monitorCentral: document.getElementById('monitorCentral').value,
-                trabalhadores: []
-            };
-
-            document.querySelectorAll('.worker-row').forEach(row => {
-                const region = row.querySelector('.worker-region').value;
-                const names = row.querySelector('.worker-names').value;
-                const func = row.querySelector('.worker-function').value;
-                
-                if (region || names || func) {
-                    escala.trabalhadores.push({region, names, func});
-                }
-            });
-
-            localStorage.setItem('escala_ceope', JSON.stringify(escala));
-            alert('Escala salva com sucesso!');
-        }
-
-        function loadEscala() {
-            const saved = localStorage.getItem('escala_ceope');
-            if (!saved) {
-                alert('Nenhuma escala salva encontrada');
-                return;
-            }
-
-            const escala = JSON.parse(saved);
-            
-            document.getElementById('dataEscala').value = escala.data || '';
-            document.getElementById('turno').value = escala.turno || '';
-            document.getElementById('supervisorAuxiliar').value = escala.supervisorAuxiliar || '';
-            document.getElementById('monitorCentral').value = escala.monitorCentral || '';
-
-            // Limpar trabalhadores existentes
-            const container = document.getElementById('workersContainer');
-            container.innerHTML = '';
-
-            // Carregar trabalhadores
-            escala.trabalhadores.forEach(worker => {
-                addWorkerFromData(worker.region, worker.names, worker.func);
-            });
-
-            updateTotal();
-            alert('Escala carregada com sucesso!');
-        }
-
-        // Gerar Excel
-        function generateExcel() {
-            const data = document.getElementById('dataEscala').value;
-            const turno = document.getElementById('turno').value;
-            
-            if (!data || !turno) {
-                alert('Por favor, preencha a data e o turno');
-                return;
-            }
-
-            const wb = XLSX.utils.book_new();
-            const wsData = [];
-
-            // Cabeçalho
-            wsData.push(['ESCALA DE TRABALHO - VIA LIVRE']);
-            wsData.push([`Data: ${new Date(data).toLocaleDateString('pt-BR')} - Turno: ${turno}`]);
-            wsData.push([]);
-
-            // Supervisores principais
-            wsData.push(['SUPERVISORES PRINCIPAIS (NÃO CONTAM):']);
-            wsData.push(['SUPERVISOR 1, SUPERVISOR 2']);
-            wsData.push([]);
-
-            // Supervisor auxiliar
-            const supervisorAux = document.getElementById('supervisorAuxiliar').value;
-            if (supervisorAux) {
-                wsData.push(['SUPERVISOR AUXILIAR (CONTA):']);
-                wsData.push([supervisorAux]);
-                wsData.push([]);
-            }
-
-            // Trabalhadores
-            wsData.push(['REGIÃO', 'TRABALHADORES', 'FUNÇÃO']);
-            document.querySelectorAll('.worker-row').forEach(row => {
-                const region = row.querySelector('.worker-region').value;
-                const names = row.querySelector('.worker-names').value;
-                const func = row.querySelector('.worker-function').value;
-                
-                if (region || names || func) {
-                    wsData.push([region, names, func]);
-                }
-            });
-
-            // Total
-            wsData.push([]);
-            wsData.push(['TOTAL DE TRABALHADORES:', document.getElementById('totalTrabalhadores').textContent]);
-
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            XLSX.utils.book_append_sheet(wb, ws, 'Escala');
-            
-            const fileName = `Escala_${data.replace(/-/g, '')}_${turno}.xlsx`;
-            XLSX.writeFile(wb, fileName);
-        }
-
-        // Gerar texto WhatsApp
-        function generateWhatsApp() {
-            const data = document.getElementById('dataEscala').value;
-            const turno = document.getElementById('turno').value;
-            const total = document.getElementById('totalTrabalhadores').textContent;
-            
-            if (!data || !turno) {
-                alert('Por favor, preencha a data e o turno');
-                return;
-            }
-
-            let texto = `🚨 ESCALA DE TRABALHO - VIA LIVRE 🚨\n\n`;
-            texto += `📅 DATA: ${new Date(data).toLocaleDateString('pt-BR')}\n`;
-            texto += `🕐 TURNO: ${turno.toUpperCase()}\n`;
-            texto += `👥 TOTAL: ${total} TRABALHADORES\n\n`;
-
-            const supervisorAux = document.getElementById('supervisorAuxiliar').value;
-            if (supervisorAux) {
-                texto += `👨‍💼 SUPERVISOR: ${supervisorAux.toUpperCase()}\n\n`;
-            }
-
-            texto += `📋 DISTRIBUIÇÃO:\n`;
-            document.querySelectorAll('.worker-row').forEach(row => {
-                const region = row.querySelector('.worker-region').value;
-                const names = row.querySelector('.worker-names').value;
-                
-                if (region && names) {
-                    texto += `• ${region.toUpperCase()}: ${names.toUpperCase()}\n`;
-                }
-            });
-
-            // Mostrar em popup
-            const popup = window.open('', '_blank', 'width=500,height=600');
-            popup.document.write(`
-                <html>
-                <head><title>Texto WhatsApp</title></head>
-                <body style="font-family: Arial; padding: 20px;">
-                    <h3>Texto para WhatsApp:</h3>
-                    <textarea style="width: 100%; height: 400px; font-family: monospace;">${texto}</textarea>
-                    <br><br>
-                    <button onclick="navigator.clipboard.writeText(document.querySelector('textarea').value); alert('Texto copiado!')">Copiar Texto</button>
-                </body>
-                </html>
-            `);
-        }
-
-        // Pré-visualizar escala
-        function previewEscala() {
-            const data = document.getElementById('dataEscala').value;
-            const turno = document.getElementById('turno').value;
-            
-            if (!data || !turno) {
-                alert('Por favor, preencha a data e o turno');
-                return;
-            }
-
-            let preview = `<h2>Pré-visualização da Escala</h2>`;
-            preview += `<p><strong>Data:</strong> ${new Date(data).toLocaleDateString('pt-BR')}</p>`;
-            preview += `<p><strong>Turno:</strong> ${turno}</p>`;
-            preview += `<p><strong>Total:</strong> ${document.getElementById('totalTrabalhadores').textContent} trabalhadores</p>`;
-            
-            const supervisorAux = document.getElementById('supervisorAuxiliar').value;
-            if (supervisorAux) {
-                preview += `<p><strong>Supervisor Auxiliar:</strong> ${supervisorAux}</p>`;
-            }
-
-            preview += `<h3>Distribuição:</h3><ul>`;
-            document.querySelectorAll('.worker-row').forEach(row => {
-                const region = row.querySelector('.worker-region').value;
-                const names = row.querySelector('.worker-names').value;
-                const func = row.querySelector('.worker-function').value;
-                
-                if (region || names) {
-                    preview += `<li><strong>${region}:</strong> ${names} (${func})</li>`;
-                }
-            });
-            preview += `</ul>`;
-
-            const popup = window.open('', '_blank', 'width=600,height=500');
-            popup.document.write(`
-                <html>
-                <head><title>Pré-visualização</title></head>
-                <body style="font-family: Arial; padding: 20px;">
-                    ${preview}
-                </body>
-                </html>
-            `);
-        }
-
-        // Funções do Relatório Operacional (mantidas do sistema original)
-        function salvarRascunho() {
-            const relatorio = {
-                data: document.getElementById('dataRelatorio').value,
-                turno: document.getElementById('turnoRelatorio').value,
-                supervisor: document.getElementById('supervisor').value,
-                totalOperadores: document.getElementById('totalOperadores').value,
-                internos: document.getElementById('internos').value,
-                externos: document.getElementById('externos').value,
-                central: document.getElementById('central').value,
-                postosFixos: document.getElementById('postosFixos').value,
-                equipesVolantes: document.getElementById('equipesVolantes').value,
-                observacoes: document.getElementById('observacoes').value
-            };
-
-            localStorage.setItem('relatorio_ceope', JSON.stringify(relatorio));
-            alert('Rascunho salvo com sucesso!');
-        }
-
-        function carregarRascunho() {
-            const saved = localStorage.getItem('relatorio_ceope');
-            if (!saved) {
-                alert('Nenhum rascunho encontrado');
-                return;
-            }
-
-            const relatorio = JSON.parse(saved);
-            
-            Object.keys(relatorio).forEach(key => {
-                const element = document.getElementById(key === 'turno' ? 'turnoRelatorio' : key === 'data' ? 'dataRelatorio' : key);
-                if (element) {
-                    element.value = relatorio[key] || '';
-                }
-            });
-
-            alert('Rascunho carregado com sucesso!');
-        }
-
-        function gerarPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            const data = document.getElementById('dataRelatorio').value;
-            const turno = document.getElementById('turnoRelatorio').value;
-            
-            if (!data || !turno) {
-                alert('Por favor, preencha a data e o turno');
-                return;
-            }
-
-            // Cabeçalho
-            doc.setFontSize(16);
-            doc.text('RELATÓRIO OPERACIONAL - VIA LIVRE', 20, 20);
-            
-            doc.setFontSize(12);
-            doc.text(`Data: ${new Date(data).toLocaleDateString('pt-BR')}`, 20, 35);
-            doc.text(`Turno: ${turno}`, 20, 45);
-            
-            const supervisor = document.getElementById('supervisor').value;
-            if (supervisor) {
-                doc.text(`Supervisor: ${supervisor}`, 20, 55);
-            }
-
-            // Dados operacionais
-            let yPos = 70;
-            doc.text(`Total de Operadores: ${document.getElementById('totalOperadores').value}`, 20, yPos);
-            yPos += 10;
-            doc.text(`Internos: ${document.getElementById('internos').value}`, 20, yPos);
-            yPos += 10;
-            doc.text(`Externos: ${document.getElementById('externos').value}`, 20, yPos);
-            yPos += 20;
-
-            // Divisões
-            doc.text('DIVISÃO DAS OPERAÇÕES:', 20, yPos);
-            yPos += 15;
-
-            const central = document.getElementById('central').value;
-            if (central) {
-                doc.text('01. Central:', 20, yPos);
-                yPos += 10;
-                const centralLines = doc.splitTextToSize(central, 170);
-                doc.text(centralLines, 25, yPos);
-                yPos += centralLines.length * 5 + 10;
-            }
-
-            const postosFixos = document.getElementById('postosFixos').value;
-            if (postosFixos) {
-                doc.text('02. Postos Fixos:', 20, yPos);
-                yPos += 10;
-                const postosLines = doc.splitTextToSize(postosFixos, 170);
-                doc.text(postosLines, 25, yPos);
-                yPos += postosLines.length * 5 + 10;
-            }
-
-            const equipesVolantes = document.getElementById('equipesVolantes').value;
-            if (equipesVolantes) {
-                doc.text('03. Equipes Volantes:', 20, yPos);
-                yPos += 10;
-                const equipesLines = doc.splitTextToSize(equipesVolantes, 170);
-                doc.text(equipesLines, 25, yPos);
-                yPos += equipesLines.length * 5 + 10;
-            }
-
-            const observacoes = document.getElementById('observacoes').value;
-            if (observacoes) {
-                doc.text('Observações:', 20, yPos);
-                yPos += 10;
-                const obsLines = doc.splitTextToSize(observacoes, 170);
-                doc.text(obsLines, 25, yPos);
-            }
-
-            const fileName = `Relatorio_${data.replace(/-/g, '')}_${turno}.pdf`;
-            doc.save(fileName);
-        }
-
-        function gerarTextoWhatsApp() {
-            const data = document.getElementById('dataRelatorio').value;
-            const turno = document.getElementById('turnoRelatorio').value;
-            
-            if (!data || !turno) {
-                alert('Por favor, preencha a data e o turno');
-                return;
-            }
-
-            let texto = `📋 RELATÓRIO OPERACIONAL - VIA LIVRE\n\n`;
-            texto += `📅 ${new Date(data).toLocaleDateString('pt-BR')} - ${turno.toUpperCase()}\n`;
-            texto += `👥 Total: ${document.getElementById('totalOperadores').value} operadores\n`;
-            texto += `🏢 Internos: ${document.getElementById('internos').value}\n`;
-            texto += `🚗 Externos: ${document.getElementById('externos').value}\n\n`;
-
-            const central = document.getElementById('central').value;
-            if (central) {
-                texto += `🏢 CENTRAL:\n${central}\n\n`;
-            }
-
-            const postosFixos = document.getElementById('postosFixos').value;
-            if (postosFixos) {
-                texto += `🏗️ POSTOS FIXOS:\n${postosFixos}\n\n`;
-            }
-
-            const equipesVolantes = document.getElementById('equipesVolantes').value;
-            if (equipesVolantes) {
-                texto += `🚗 EQUIPES VOLANTES:\n${equipesVolantes}\n\n`;
-            }
-
-            const popup = window.open('', '_blank', 'width=500,height=600');
-            popup.document.write(`
-                <html>
-                <head><title>Texto WhatsApp</title></head>
-                <body style="font-family: Arial; padding: 20px;">
-                    <h3>Texto para WhatsApp:</h3>
-                    <textarea style="width: 100%; height: 400px; font-family: monospace;">${texto}</textarea>
-                    <br><br>
-                    <button onclick="navigator.clipboard.writeText(document.querySelector('textarea').value); alert('Texto copiado!')">Copiar Texto</button>
-                </body>
-                </html>
-            `);
-        }
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            // Definir data atual
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('dataEscala').value = hoje;
-            document.getElementById('dataRelatorio').value = hoje;
-            
-            updateTotal();
-        });
-    </script>
+    })();
+  </script>
 </body>
 </html>
-
