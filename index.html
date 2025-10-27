@@ -3,168 +3,58 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>QRV Mobile — Operacional</title>
+  <title>QRV Mobile — Operacional v2.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --laranja: #F97316;
-      --laranja-esc: #ea580c;
-      --azul: #2563EB;
-      --bg: #FFFFFF;
-      --page-bg: #F1F5F9;
-      --texto: #0F172A;
-      --borda: #CBD5E1;
-      --touch-size: 58px;
+      --laranja:#F97316; --azul:#2563EB; --bg:#FFFFFF;
+      --page-bg:#F1F5F9; --texto:#0F172A; --borda:#CBD5E1; --touch-size:58px;
+    }
+    html,body{height:100%;margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--page-bg);color:var(--texto);font-size:18px;-webkit-tap-highlight-color:transparent}
+    .app{max-width:520px;margin:0 auto;padding:16px;box-sizing:border-box}
+    .card{background:var(--bg);border-radius:16px;padding:20px;box-shadow:0 8px 18px rgba(2,6,23,0.08);margin-bottom:90px}
+    h1{font-size:22px;margin:0 0 8px;color:var(--laranja);text-align:center;font-weight:700}
+    #previewLive{background:#fff;border:2px solid var(--borda);border-radius:12px;padding:12px;margin-bottom:14px;white-space:pre-wrap;font-size:16px;line-height:1.4}
+    p.orientacao{font-size:17px;margin:4px 0 12px;color:#475569;text-align:center}
+    label{display:block;font-size:17px;margin-top:16px;font-weight:600}
+    input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:2px solid var(--borda);font-size:18px;margin-top:6px;background:#fff;text-transform:uppercase}
+    .send-area{position:fixed;left:0;right:0;bottom:env(safe-area-inset-bottom,0);padding:14px;background:linear-gradient(0deg,rgba(249,250,251,0.96),rgba(249,250,251,0.7));box-shadow:0 -6px 14px rgba(2,6,23,0.1);display:flex;gap:10px;align-items:center;z-index:20}
+    .primary-btn{flex:1;background:var(--laranja);color:#fff;border:none;border-radius:14px;padding:16px;min-height:var(--touch-size);font-weight:700;font-size:19px}
+    .secondary-btn{background:#fff;border:2px solid var(--borda);border-radius:14px;padding:14px;min-height:var(--touch-size);font-weight:600;font-size:19px}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--laranja);color:#fff;padding:12px 18px;border-radius:10px;display:none;font-size:17px}
+    .toast.show{display:block}
+    @media (prefers-color-scheme:dark){:root{--bg:#0b1220;--page-bg:#071126;--texto:#e6eef8;--borda:#1f2937}
+      .card{box-shadow:none}input{background:#1e293b;color:#f8fafc;border-color:#334155}
+      .send-area{background:linear-gradient(0deg,rgba(2,6,23,0.95),rgba(2,6,23,0.7));}
+      #previewLive{background:#0f172a;color:#e2e8f0;border-color:#334155}
     }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--page-bg);
-      color: var(--texto);
-      -webkit-tap-highlight-color: transparent;
-      font-size: 18px;
-    }
-
-    .app {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 16px;
-      box-sizing: border-box;
-    }
-
-    .card {
-      background: var(--bg);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 18px rgba(2,6,23,0.08);
-      margin-bottom: 90px;
-    }
-
-    h1 {
-      font-size: 22px;
-      margin: 0 0 8px;
-      color: var(--laranja);
-      text-align: center;
-      font-weight: 700;
-    }
-
-    p.orientacao {
-      font-size: 17px;
-      margin: 4px 0 12px;
-      color: #475569;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      font-size: 17px;
-      margin-top: 16px;
-      font-weight: 600;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 14px;
-      border-radius: 12px;
-      border: 2px solid var(--borda);
-      font-size: 18px;
-      margin-top: 6px;
-      background: #fff;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .send-area {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: env(safe-area-inset-bottom, 0);
-      padding: 14px;
-      background: linear-gradient(0deg, rgba(249,250,251,0.96), rgba(249,250,251,0.7));
-      box-shadow: 0 -6px 14px rgba(2,6,23,0.1);
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      z-index: 20;
-    }
-
-    .primary-btn {
-      flex: 1;
-      background: var(--laranja);
-      color: #fff;
-      border: none;
-      border-radius: 14px;
-      padding: 16px;
-      min-height: var(--touch-size);
-      font-weight: 700;
-      font-size: 19px;
-    }
-
-    .secondary-btn {
-      background: #fff;
-      border: 2px solid var(--borda);
-      border-radius: 14px;
-      padding: 14px;
-      min-height: var(--touch-size);
-      font-weight: 600;
-      font-size: 19px;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 90px;
-      background: var(--laranja);
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 10px;
-      display: none;
-      font-size: 17px;
-    }
-
-    .toast.show { display: block; }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b1220;
-        --page-bg: #071126;
-        --texto: #e6eef8;
-        --borda: #1f2937;
-      }
-      .card { box-shadow: none; }
-      input, textarea { background: #1e293b; color: #f8fafc; border-color: #334155; }
-      .send-area { background: linear-gradient(0deg, rgba(2,6,23,0.95), rgba(2,6,23,0.7)); }
-    }
+    #previewLive {
+  background: rgba(249, 115, 22, 0.08); /* laranja suave translúcido */
+  border: 2px solid var(--borda);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+  font-size: 16px;
+  line-height: 1.4;
+}
   </style>
 </head>
-
 <body>
   <div class="app">
     <div class="card">
       <h1>QRV Operacional</h1>
-      <p class="orientacao">Digite os nomes na ordem: <br><strong>Condutor, Tripulante, Tripulante...</strong></p>
-
+      <div id="previewLive">VT ...</div>
+      <p class="orientacao">Digite os nomes na ordem: <strong>Condutor, Tripulante, Tripulante...</strong></p>
       <form id="qrvForm" autocomplete="off">
         <label for="vt">Viatura (VT)</label>
         <input id="vt" name="vt" type="text" inputmode="numeric" placeholder="Ex: 215" required>
 
         <label for="equipe">Equipe</label>
         <input id="equipe" name="equipe" type="text" placeholder="Ex: Márcio, Moura, Rafael" required>
-
-        <!--
-        <label for="qru">QRU</label>
-        <input id="qru" name="qru" type="text" placeholder="Digite o QRU...">
-        -->
 
         <label for="qth">QTH</label>
         <input id="qth" name="qth" type="text" placeholder="Ex: Rua Cobego de Castro x Rua Eduardo Perdigão" required>
@@ -173,48 +63,59 @@
   </div>
 
   <div class="send-area">
+    <button id="repeatBtn" class="secondary-btn" style="flex:0 0 auto;">Repetir</button>
     <button id="previewBtn" class="secondary-btn">Pré-visualizar</button>
-    <button id="sendBtn" class="primary-btn">Enviar (WhatsApp)</button>
+    <button id="sendBtn" class="primary-btn">Enviar</button>
   </div>
 
   <div id="toast" class="toast"></div>
 
   <script defer>
     (function(){
-      const form = document.getElementById('qrvForm');
-      const vt = document.getElementById('vt');
-      const equipe = document.getElementById('equipe');
-      const qth = document.getElementById('qth');
-      const toast = document.getElementById('toast');
-      const sendBtn = document.getElementById('sendBtn');
-      const previewBtn = document.getElementById('previewBtn');
+      const form=document.getElementById('qrvForm');
+      const vt=document.getElementById('vt');
+      const equipe=document.getElementById('equipe');
+      const qth=document.getElementById('qth');
+      const toast=document.getElementById('toast');
+      const preview=document.getElementById('previewLive');
+      const sendBtn=document.getElementById('sendBtn');
+      const previewBtn=document.getElementById('previewBtn');
+      const repeatBtn=document.getElementById('repeatBtn');
 
-      // carregar últimos dados
-      window.addEventListener('load', ()=>{
+      window.addEventListener('load',()=>{
         try{
-          const saved = JSON.parse(localStorage.getItem('qrvLast')||'{}');
-          if(saved.vt) vt.value=saved.vt;
-          if(saved.equipe) equipe.value=saved.equipe;
-          if(saved.qth) qth.value=saved.qth;
-          const first = document.querySelector('input[required]');
-          if(first && !first.value) first.focus();
+          const saved=JSON.parse(localStorage.getItem('qrvLast')||'{}');
+          if(saved.vt)vt.value=saved.vt;
+          if(saved.equipe)equipe.value=saved.equipe;
+          if(saved.qth)qth.value=saved.qth;
+          atualizarPreview();
         }catch(e){}
       });
 
-      form.addEventListener('input', ()=>{
+      form.addEventListener('input',()=>{
         const data={vt:vt.value,equipe:equipe.value,qth:qth.value};
         localStorage.setItem('qrvLast',JSON.stringify(data));
+        atualizarPreview();
+      });
+
+      vt.addEventListener('focus',e=>{setTimeout(()=>e.target.select(),50)});
+      qth.addEventListener('focus',e=>{setTimeout(()=>e.target.select(),50)});
+
+      equipe.addEventListener('blur',()=>{
+        equipe.value=equipe.value.toUpperCase().replace(/\s*,\s*/g,", ").replace(/\s+/g," ");
       });
 
       function gerarTexto(){
-        const vtVal = vt.value.trim();
-        const eqVal = equipe.value.trim();
-        const qthVal = qth.value.trim();
-        const nomes = eqVal.split(',').map(n=>n.trim()).filter(Boolean);
-        if(nomes.length>0){
-          nomes[0] = nomes[0];
-        }
+        const vtVal=vt.value.trim();
+        const eqVal=equipe.value.trim();
+        const qthVal=qth.value.trim();
+        const nomes=eqVal.split(',').map(n=>n.trim()).filter(Boolean);
+        if(nomes.length>0){nomes[0]=nomes[0]+" (CONDUTOR)";}
         return `VT ${vtVal}\n${nomes.join(', ')}\nQTH: ${qthVal}`;
+      }
+
+      function atualizarPreview(){
+        preview.textContent=gerarTexto();
       }
 
       function validar(){
@@ -226,8 +127,7 @@
       }
 
       function showToast(msg,ms=2000){
-        toast.textContent=msg;
-        toast.classList.add('show');
+        toast.textContent=msg;toast.classList.add('show');
         setTimeout(()=>toast.classList.remove('show'),ms);
       }
 
@@ -248,23 +148,18 @@
         const txt=gerarTexto();
         const previewBox=document.createElement('div');
         previewBox.style.position='fixed';
-        previewBox.style.left='0';
-        previewBox.style.top='0';
-        previewBox.style.right='0';
-        previewBox.style.bottom='0';
+        previewBox.style.left='0';previewBox.style.top='0';
+        previewBox.style.right='0';previewBox.style.bottom='0';
         previewBox.style.background='rgba(0,0,0,0.6)';
-        previewBox.style.display='flex';
-        previewBox.style.justifyContent='center';
-        previewBox.style.alignItems='center';
-        previewBox.style.padding='20px';
-        previewBox.innerHTML=`
-          <div style="background:white;border-radius:12px;max-width:420px;width:90%;padding:18px;font-size:18px;">
-            <h2 style='font-size:20px;color:var(--azul);margin-top:0;'>Pré-visualização</h2>
-            <pre style='white-space:pre-wrap;font-family:monospace;font-size:17px;'>${txt}</pre>
-            <div style='text-align:right;margin-top:14px;'>
-              <button id='closePrev' style='padding:10px 18px;border:none;background:var(--laranja);color:#fff;border-radius:8px;font-size:17px;'>Fechar</button>
-            </div>
-          </div>`;
+        previewBox.style.display='flex';previewBox.style.justifyContent='center';
+        previewBox.style.alignItems='center';previewBox.style.padding='20px';
+        previewBox.innerHTML=`<div style="background:white;border-radius:12px;max-width:420px;width:90%;padding:18px;font-size:18px;">
+          <h2 style='font-size:20px;color:var(--azul);margin-top:0;'>Pré-visualização</h2>
+          <pre style='white-space:pre-wrap;font-family:monospace;font-size:17px;'>${txt}</pre>
+          <div style='text-align:right;margin-top:14px;'>
+            <button id='closePrev' style='padding:10px 18px;border:none;background:var(--laranja);color:#fff;border-radius:8px;font-size:17px;'>Fechar</button>
+          </div>
+        </div>`;
         document.body.appendChild(previewBox);
         document.getElementById('closePrev').addEventListener('click',()=>document.body.removeChild(previewBox));
       });
@@ -273,6 +168,14 @@
         if(!validar())return;
         const txt=gerarTexto();
         enviarParaWhatsApp(txt);
+      });
+
+      repeatBtn.addEventListener('click',()=>{
+        const saved=JSON.parse(localStorage.getItem('qrvLast')||'{}');
+        if(saved.vt||saved.equipe||saved.qth){
+          vt.value=saved.vt||'';equipe.value=saved.equipe||'';qth.value=saved.qth||'';
+          atualizarPreview();showToast('QRV anterior carregado');
+        }else showToast('Nenhum QRV anterior encontrado');
       });
 
       form.addEventListener('submit',e=>{e.preventDefault();sendBtn.click();});
