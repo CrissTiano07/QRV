@@ -14,11 +14,17 @@
   --azul:#2563eb;
   --cinza:#475569;
   --texto:#0f172a;
+  --vermelho:#dc2626;
+  --verde:#16a34a;
+  --amarelo:#facc15;
+  --roxo:#7e22ce;
 }
 html,body{
-  margin:0;height:100%;background:var(--fundo);
+  margin:0;height:100%;
+  background:var(--fundo);
   font-family:'Inter',system-ui,sans-serif;
-  color:var(--texto);overflow:hidden;
+  color:var(--texto);
+  overflow:hidden;
   -webkit-tap-highlight-color:transparent;
 }
 .view{
@@ -31,33 +37,40 @@ html,body{
 .hidden-left{transform:translateX(-100%);}
 .active{transform:translateX(0);}
 h1{
-  font-size:20px;text-align:center;margin:0 0 20px;
-  color:var(--laranja);font-weight:700;text-shadow:1px 1px 2px #fff;
+  font-size:20px;text-align:center;margin:0 0 10px;
+  color:var(--laranja);font-weight:700;
 }
-button{cursor:pointer;outline:none;}
+button{cursor:pointer;outline:none;border:none;}
 /* Painel principal */
 .painel{
-  display:grid;grid-template-rows:repeat(3,1fr);gap:20px;
-  width:90vw;max-width:480px;height:90vh;margin:auto;margin-top:5vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(3,1fr);
+  gap:22px;
+  width:84vw;max-width:400px;height:75vh;
+  margin:auto;margin-top:6vh;
 }
 .btn{
-  border:none;border-radius:22px;background:var(--fundo);
+  border:none;border-radius:20px;background:var(--fundo);
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-size:20px;font-weight:700;color:#1e293b;
-  transition:all .12s ease-in-out;
+  font-size:15px;font-weight:700;color:#1e293b;
+  transition:all .12s ease-in-out;padding:20px 0;
 }
 .btn:active{
   box-shadow:inset 8px 8px 16px var(--sombra),
               inset -8px -8px 16px var(--luz);
   transform:scale(.97);
 }
-.icon{font-size:46px;margin-bottom:12px;}
+.icon{font-size:32px;margin-bottom:6px;}
 .qrv .icon{color:var(--laranja);}
 .rendicao .icon{color:var(--cinza);}
 .foto .icon{color:var(--azul);}
+.cones .icon{color:var(--amarelo);}
+.apoio .icon{color:var(--vermelho);}
+.chat .icon{color:var(--verde);}
 
-/* Cabeçalho das telas internas */
+/* Cabeçalho */
 .header{
   display:flex;align-items:center;justify-content:space-between;
   padding:12px 16px;
@@ -66,9 +79,9 @@ button{cursor:pointer;outline:none;}
   background:none;border:none;font-size:26px;font-weight:700;
   color:var(--texto);
 }
-.header .toggle-mode{
-  font-size:22px;cursor:pointer;
-}
+.header .toggle-mode{font-size:22px;cursor:pointer;}
+
+/* Cartões e campos */
 .card{
   background:var(--fundo);border-radius:20px;
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
@@ -85,17 +98,40 @@ input,textarea{
   color:var(--texto);text-transform:uppercase;
 }
 textarea{min-height:100px;resize:vertical;}
-.send-area{
-  display:flex;gap:10px;padding:16px;
-}
+.send-area{display:flex;gap:10px;padding:16px;}
 .primary-btn{
   flex:1;background:var(--laranja);color:#fff;border:none;
   border-radius:14px;font-size:18px;font-weight:700;
   box-shadow:6px 6px 12px #c5cad3, -6px -6px 12px #fff;
+  transition:all .12s ease-in-out;
 }
 .primary-btn:active{
   box-shadow:inset 6px 6px 12px #c5cad3, inset -6px -6px 12px #fff;
   transform:scale(.98);
+}
+
+/* Barra inferior - emergência e central */
+.bottom-bar{
+  position:fixed;bottom:0;left:0;width:100%;
+  display:flex;justify-content:space-around;align-items:center;
+  padding:14px 0;background:var(--fundo);
+  box-shadow:0 -6px 16px rgba(0,0,0,0.05);
+}
+.bottom-btn{
+  width:46%;max-width:160px;padding:14px 0;
+  border-radius:20px;font-weight:700;font-size:16px;
+  box-shadow:6px 6px 12px #c5cad3, -6px -6px 12px #fff;
+  transition:all .12s ease-in-out;
+}
+.bottom-btn:active{
+  box-shadow:inset 6px 6px 12px #c5cad3,inset -6px -6px 12px #fff;
+  transform:scale(.98);
+}
+.btn-emergencia{
+  background:var(--vermelho);color:#fff;
+}
+.btn-central{
+  background:var(--laranja);color:#fff;
 }
 
 /* Tema escuro refinado */
@@ -118,18 +154,25 @@ textarea{min-height:100px;resize:vertical;}
 .dark .card{
   box-shadow:8px 8px 16px #070a12, -8px -8px 16px #1c2231;
 }
-.dark h1{text-shadow:none;color:#f97316;}
+.dark h1{color:#f97316;}
 </style>
 </head>
 <body>
 
 <!-- MENU -->
 <div id="menuView" class="view active">
-  <!--<h1>QRV Operacional</h1>-->
+  <h1>QRV Operacional</h1>
   <div class="painel">
     <button class="btn qrv" onclick="abrir('qrvView')"><div class="icon">🚓</div>QRV</button>
     <button class="btn rendicao" onclick="abrir('rendView')"><div class="icon">🔄</div>RENDIÇÃO</button>
     <button class="btn foto" onclick="abrir('fotoView')"><div class="icon">📸</div>FOTO</button>
+    <button class="btn cones" onclick="abrir('conesView')"><div class="icon">🧱</div>CONES</button>
+    <button class="btn apoio" onclick="abrir('apoioView')"><div class="icon">🚧</div>APOIO</button>
+    <button class="btn chat" onclick="abrir('chatView')"><div class="icon">💬</div>CHAT</button>
+  </div>
+  <div class="bottom-bar">
+    <button class="bottom-btn btn-emergencia" onclick="acionarEmergencia()">🆘 Emergência</button>
+    <button class="bottom-btn btn-central" onclick="ligarCentral()">📞 Central</button>
   </div>
 </div>
 
@@ -160,51 +203,33 @@ textarea{min-height:100px;resize:vertical;}
     <input id="qth" placeholder="Ex: RUA 01 x RUA 02">
   </div>
   <div class="send-area">
-    <button class="primary-btn" onclick="enviarQRV()">Enviar (WhatsApp)</button>
+    <button class="primary-btn" onclick="enviarQRV()">ENVIAR</button>
   </div>
 </div>
 
-<!-- RENDIÇÃO -->
-<div id="rendView" class="view hidden-right">
-  <div class="header">
-    <button onclick="voltar('rendView')">⬅️</button>
-    <div class="toggle-mode" onclick="toggleModo()">☀️</div>
-  </div>
-  <div class="card"><h2 style="text-align:center;">Solicitação de rendição (em desenvolvimento)</h2></div>
-</div>
-
-<!-- FOTO -->
-<div id="fotoView" class="view hidden-right">
-  <div class="header">
-    <button onclick="voltar('fotoView')">⬅️</button>
-    <div class="toggle-mode" onclick="toggleModo()">☀️</div>
-  </div>
-  <div class="card"><h2 style="text-align:center;">Registro de foto (em desenvolvimento)</h2></div>
-</div>
+<!-- Páginas adicionais -->
+<div id="rendView" class="view hidden-right"><div class="header"><button onclick="voltar('rendView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Rendição (em desenvolvimento)</h2></div></div>
+<div id="fotoView" class="view hidden-right"><div class="header"><button onclick="voltar('fotoView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Registro de foto (em desenvolvimento)</h2></div></div>
+<div id="conesView" class="view hidden-right"><div class="header"><button onclick="voltar('conesView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Gerenciamento de cones (em desenvolvimento)</h2></div></div>
+<div id="apoioView" class="view hidden-right"><div class="header"><button onclick="voltar('apoioView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Solicitação de apoio (em desenvolvimento)</h2></div></div>
+<div id="chatView" class="view hidden-right"><div class="header"><button onclick="voltar('chatView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Chat operacional (em desenvolvimento)</h2></div></div>
 
 <script>
 let modoEscuro=false;
-
 function abrir(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
-  menu.classList.remove('active');
-  menu.classList.add('hidden-left');
-  tela.classList.remove('hidden-right');
-  tela.classList.add('active');
+  menu.classList.remove('active');menu.classList.add('hidden-left');
+  tela.classList.remove('hidden-right');tela.classList.add('active');
   try{navigator.vibrate?.(40);}catch(e){}
 }
-
 function voltar(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
-  tela.classList.remove('active');
-  tela.classList.add('hidden-right');
-  menu.classList.remove('hidden-left');
-  menu.classList.add('active');
+  tela.classList.remove('active');tela.classList.add('hidden-right');
+  menu.classList.remove('hidden-left');menu.classList.add('active');
   try{navigator.vibrate?.(30);}catch(e){}
 }
-
 function toggleModo(){
   document.body.classList.toggle('dark');
   modoEscuro=!modoEscuro;
@@ -212,7 +237,6 @@ function toggleModo(){
     btn.textContent=modoEscuro?'🌙':'☀️';
   });
 }
-
 function enviarQRV(){
   const vt=document.getElementById('vt').value.trim();
   const eq=document.getElementById('equipe').value.trim();
@@ -222,6 +246,12 @@ function enviarQRV(){
   const msg=`VT ${vt}\n${eq} (Condutor)\nQRU: ${qru}\nQTH: ${qth}`;
   const encoded=encodeURIComponent(msg);
   window.location.href=`whatsapp://send?text=${encoded}`;
+}
+function ligarCentral(){
+  window.location.href='tel:+5585XXXXXXXX'; // substitua pelo número real
+}
+function acionarEmergencia(){
+  alert('Segure pressionado para acionar emergência.');
 }
 </script>
 </body>
