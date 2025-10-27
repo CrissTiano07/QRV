@@ -1,185 +1,228 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>QRV Mobile — Operacional v2.0</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --laranja:#F97316; --azul:#2563EB; --bg:#FFFFFF;
-      --page-bg:#F1F5F9; --texto:#0F172A; --borda:#CBD5E1; --touch-size:58px;
-    }
-    html,body{height:100%;margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--page-bg);color:var(--texto);font-size:18px;-webkit-tap-highlight-color:transparent}
-    .app{max-width:520px;margin:0 auto;padding:16px;box-sizing:border-box}
-    .card{background:var(--bg);border-radius:16px;padding:20px;box-shadow:0 8px 18px rgba(2,6,23,0.08);margin-bottom:90px}
-    h1{font-size:22px;margin:0 0 8px;color:var(--laranja);text-align:center;font-weight:700}
-    #previewLive{background:#fff;border:2px solid var(--borda);border-radius:12px;padding:12px;margin-bottom:14px;white-space:pre-wrap;font-size:16px;line-height:1.4}
-    p.orientacao{font-size:17px;margin:4px 0 12px;color:#475569;text-align:center}
-    label{display:block;font-size:17px;margin-top:16px;font-weight:600}
-    input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:2px solid var(--borda);font-size:18px;margin-top:6px;background:#fff;text-transform:uppercase}
-    .send-area{position:fixed;left:0;right:0;bottom:env(safe-area-inset-bottom,0);padding:14px;background:linear-gradient(0deg,rgba(249,250,251,0.96),rgba(249,250,251,0.7));box-shadow:0 -6px 14px rgba(2,6,23,0.1);display:flex;gap:10px;align-items:center;z-index:20}
-    .primary-btn{flex:1;background:var(--laranja);color:#fff;border:none;border-radius:14px;padding:16px;min-height:var(--touch-size);font-weight:700;font-size:19px}
-    .secondary-btn{background:#fff;border:2px solid var(--borda);border-radius:14px;padding:14px;min-height:var(--touch-size);font-weight:600;font-size:19px}
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--laranja);color:#fff;padding:12px 18px;border-radius:10px;display:none;font-size:17px}
-    .toast.show{display:block}
-    @media (prefers-color-scheme:dark){:root{--bg:#0b1220;--page-bg:#071126;--texto:#e6eef8;--borda:#1f2937}
-      .card{box-shadow:none}input{background:#1e293b;color:#f8fafc;border-color:#334155}
-      .send-area{background:linear-gradient(0deg,rgba(2,6,23,0.95),rgba(2,6,23,0.7));}
-      #previewLive{background:#0f172a;color:#e2e8f0;border-color:#334155}
-    }
-
-    #previewLive {
-  background: rgba(249, 115, 22, 0.08); /* laranja suave translúcido */
-  border: 2px solid var(--borda);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 14px;
-  white-space: pre-wrap;
-  font-size: 16px;
-  line-height: 1.4;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>QRV Operacional — Sistema Integrado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fundo:#e9eef5;
+  --sombra:#c5cad3;
+  --luz:#ffffff;
+  --laranja:#f97316;
+  --azul:#2563eb;
+  --cinza:#475569;
+  --texto:#0f172a;
 }
-  </style>
+html,body{
+  margin:0;height:100%;background:var(--fundo);
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--texto);overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.view{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  transition:transform .35s cubic-bezier(.23,1,.32,1);
+  overflow-y:auto;box-sizing:border-box;
+  background:var(--fundo);
+}
+.hidden-right{transform:translateX(100%);}
+.hidden-left{transform:translateX(-100%);}
+.active{transform:translateX(0);}
+h1{
+  font-size:20px;text-align:center;margin:0 0 20px;
+  color:var(--laranja);font-weight:700;text-shadow:1px 1px 2px #fff;
+}
+button{cursor:pointer;outline:none;}
+/* Painel principal */
+.painel{
+  display:grid;grid-template-rows:repeat(3,1fr);gap:20px;
+  width:90vw;max-width:480px;height:90vh;margin:auto;margin-top:5vh;
+}
+.btn{
+  border:none;border-radius:22px;background:var(--fundo);
+  box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:20px;font-weight:700;color:#1e293b;
+  transition:all .12s ease-in-out;
+}
+.btn:active{
+  box-shadow:inset 8px 8px 16px var(--sombra),
+              inset -8px -8px 16px var(--luz);
+  transform:scale(.97);
+}
+.icon{font-size:46px;margin-bottom:12px;}
+.qrv .icon{color:var(--laranja);}
+.rendicao .icon{color:var(--cinza);}
+.foto .icon{color:var(--azul);}
+
+/* Cabeçalho das telas internas */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+}
+.header button{
+  background:none;border:none;font-size:26px;font-weight:700;
+  color:var(--texto);
+}
+.header .toggle-mode{
+  font-size:22px;cursor:pointer;
+}
+.card{
+  background:var(--fundo);border-radius:20px;
+  box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
+  padding:20px;margin:0 16px;
+}
+label{font-size:15px;font-weight:600;}
+input,textarea{
+  width:100%;border:none;outline:none;
+  background:var(--fundo);
+  box-shadow:inset 6px 6px 12px var(--sombra),
+             inset -6px -6px 12px var(--luz);
+  border-radius:12px;padding:14px 16px;
+  font-size:17px;font-weight:600;margin-top:8px;
+  color:var(--texto);text-transform:uppercase;
+}
+textarea{min-height:100px;resize:vertical;}
+.send-area{
+  display:flex;gap:10px;padding:16px;
+}
+.primary-btn{
+  flex:1;background:var(--laranja);color:#fff;border:none;
+  border-radius:14px;font-size:18px;font-weight:700;
+  box-shadow:6px 6px 12px #c5cad3, -6px -6px 12px #fff;
+}
+.primary-btn:active{
+  box-shadow:inset 6px 6px 12px #c5cad3, inset -6px -6px 12px #fff;
+  transform:scale(.98);
+}
+
+/* Tema escuro refinado */
+.dark{
+  --fundo:#101827;
+  --sombra:#070a12;
+  --luz:#1c2231;
+  --texto:#e6eef8;
+}
+.dark .btn{
+  color:#e6eef8;
+  box-shadow:8px 8px 16px #070a12, -8px -8px 16px #1c2231;
+}
+.dark .btn:active{
+  box-shadow:inset 8px 8px 16px #070a12, inset -8px -8px 16px #1c2231;
+}
+.dark input, .dark textarea{
+  box-shadow:inset 6px 6px 12px #070a12, inset -6px -6px 12px #1c2231;
+}
+.dark .card{
+  box-shadow:8px 8px 16px #070a12, -8px -8px 16px #1c2231;
+}
+.dark h1{text-shadow:none;color:#f97316;}
+</style>
 </head>
 <body>
-  <div class="app">
-    <div class="card">
-      <h1>QRV Operacional</h1>
-      <div id="previewLive">VT ...</div>
-      <p class="orientacao">Digite os nomes na ordem: <strong>Condutor, Tripulante, Tripulante...</strong></p>
-      <form id="qrvForm" autocomplete="off">
-        <label for="vt">Viatura (VT)</label>
-        <input id="vt" name="vt" type="text" inputmode="numeric" placeholder="Ex: 215" required>
 
-        <label for="equipe">Equipe</label>
-        <input id="equipe" name="equipe" type="text" placeholder="Ex: Márcio, Moura, Rafael" required>
-
-        <label for="qth">QTH</label>
-        <input id="qth" name="qth" type="text" placeholder="Ex: Rua Cobego de Castro x Rua Eduardo Perdigão" required>
-      </form>
-    </div>
+<!-- MENU -->
+<div id="menuView" class="view active">
+  <h1>QRV Operacional</h1>
+  <div class="painel">
+    <button class="btn qrv" onclick="abrir('qrvView')"><div class="icon">🚓</div>QRV</button>
+    <button class="btn rendicao" onclick="abrir('rendView')"><div class="icon">🔄</div>RENDIÇÃO</button>
+    <button class="btn foto" onclick="abrir('fotoView')"><div class="icon">📸</div>FOTO</button>
   </div>
+</div>
 
+<!-- QRV -->
+<div id="qrvView" class="view hidden-right">
+  <div class="header">
+    <button onclick="voltar('qrvView')">⬅️</button>
+    <div class="toggle-mode" onclick="toggleModo()">☀️</div>
+  </div>
+  <div class="card">
+    <label>VIATURA (VT)</label>
+    <input id="vt" placeholder="Ex: 222">
+    <label>EQUIPE</label>
+    <input id="equipe" placeholder="Condutor, Tripulante, Tripulante">
+    <label>QRU</label>
+    <input list="qruList" id="qru" placeholder="Selecione ou digite...">
+    <datalist id="qruList">
+      <option value="CONTROLE DE TRÁFEGO">
+      <option value="APOIO OPERACIONAL">
+      <option value="ACIDENTE">
+      <option value="RETIRADA DE OBSTÁCULO">
+      <option value="DESLOCAMENTO">
+      <option value="ABORDAGEM">
+      <option value="PATRULHAMENTO">
+      <option value="OUTROS">
+    </datalist>
+    <label>QTH</label>
+    <input id="qth" placeholder="Ex: RUA 01 x RUA 02">
+  </div>
   <div class="send-area">
-    <button id="repeatBtn" class="secondary-btn" style="flex:0 0 auto;">Repetir</button>
-    <button id="previewBtn" class="secondary-btn">Pré-visualizar</button>
-    <button id="sendBtn" class="primary-btn">Enviar</button>
+    <button class="primary-btn" onclick="enviarQRV()">Enviar (WhatsApp)</button>
   </div>
+</div>
 
-  <div id="toast" class="toast"></div>
+<!-- RENDIÇÃO -->
+<div id="rendView" class="view hidden-right">
+  <div class="header">
+    <button onclick="voltar('rendView')">⬅️</button>
+    <div class="toggle-mode" onclick="toggleModo()">☀️</div>
+  </div>
+  <div class="card"><h2 style="text-align:center;">Solicitação de rendição (em desenvolvimento)</h2></div>
+</div>
 
-  <script defer>
-    (function(){
-      const form=document.getElementById('qrvForm');
-      const vt=document.getElementById('vt');
-      const equipe=document.getElementById('equipe');
-      const qth=document.getElementById('qth');
-      const toast=document.getElementById('toast');
-      const preview=document.getElementById('previewLive');
-      const sendBtn=document.getElementById('sendBtn');
-      const previewBtn=document.getElementById('previewBtn');
-      const repeatBtn=document.getElementById('repeatBtn');
+<!-- FOTO -->
+<div id="fotoView" class="view hidden-right">
+  <div class="header">
+    <button onclick="voltar('fotoView')">⬅️</button>
+    <div class="toggle-mode" onclick="toggleModo()">☀️</div>
+  </div>
+  <div class="card"><h2 style="text-align:center;">Registro de foto (em desenvolvimento)</h2></div>
+</div>
 
-      window.addEventListener('load',()=>{
-        try{
-          const saved=JSON.parse(localStorage.getItem('qrvLast')||'{}');
-          if(saved.vt)vt.value=saved.vt;
-          if(saved.equipe)equipe.value=saved.equipe;
-          if(saved.qth)qth.value=saved.qth;
-          atualizarPreview();
-        }catch(e){}
-      });
+<script>
+let modoEscuro=false;
 
-      form.addEventListener('input',()=>{
-        const data={vt:vt.value,equipe:equipe.value,qth:qth.value};
-        localStorage.setItem('qrvLast',JSON.stringify(data));
-        atualizarPreview();
-      });
+function abrir(id){
+  const menu=document.getElementById('menuView');
+  const tela=document.getElementById(id);
+  menu.classList.remove('active');
+  menu.classList.add('hidden-left');
+  tela.classList.remove('hidden-right');
+  tela.classList.add('active');
+  try{navigator.vibrate?.(40);}catch(e){}
+}
 
-      vt.addEventListener('focus',e=>{setTimeout(()=>e.target.select(),50)});
-      qth.addEventListener('focus',e=>{setTimeout(()=>e.target.select(),50)});
+function voltar(id){
+  const menu=document.getElementById('menuView');
+  const tela=document.getElementById(id);
+  tela.classList.remove('active');
+  tela.classList.add('hidden-right');
+  menu.classList.remove('hidden-left');
+  menu.classList.add('active');
+  try{navigator.vibrate?.(30);}catch(e){}
+}
 
-      equipe.addEventListener('blur',()=>{
-        equipe.value=equipe.value.toUpperCase().replace(/\s*,\s*/g,", ").replace(/\s+/g," ");
-      });
+function toggleModo(){
+  document.body.classList.toggle('dark');
+  modoEscuro=!modoEscuro;
+  document.querySelectorAll('.toggle-mode').forEach(btn=>{
+    btn.textContent=modoEscuro?'🌙':'☀️';
+  });
+}
 
-      function gerarTexto(){
-        const vtVal=vt.value.trim();
-        const eqVal=equipe.value.trim();
-        const qthVal=qth.value.trim();
-        const nomes=eqVal.split(',').map(n=>n.trim()).filter(Boolean);
-        if(nomes.length>0){nomes[0]=nomes[0];}
-        return `VT: ${vtVal}\nEQUIPE: ${nomes.join(', ')}\nQTH: ${qthVal}`;
-      }
-
-      function atualizarPreview(){
-        preview.textContent=gerarTexto();
-      }
-
-      function validar(){
-        if(!vt.value.trim()||!equipe.value.trim()||!qth.value.trim()){
-          showToast('Preencha todos os campos obrigatórios');
-          return false;
-        }
-        return true;
-      }
-
-      function showToast(msg,ms=2000){
-        toast.textContent=msg;toast.classList.add('show');
-        setTimeout(()=>toast.classList.remove('show'),ms);
-      }
-
-      function enviarParaWhatsApp(texto){
-        const encoded=encodeURIComponent(texto);
-        const link=`whatsapp://send?text=${encoded}`;
-        const fallback=setTimeout(()=>{
-          navigator.clipboard.writeText(texto).then(()=>{
-            showToast('Texto copiado. Abra o WhatsApp e cole.');
-            try{navigator.vibrate?.(100);}catch(e){}
-          });
-        },800);
-        try{window.location.href=link;}catch(e){clearTimeout(fallback);}
-      }
-
-      previewBtn.addEventListener('click',()=>{
-        if(!validar())return;
-        const txt=gerarTexto();
-        const previewBox=document.createElement('div');
-        previewBox.style.position='fixed';
-        previewBox.style.left='0';previewBox.style.top='0';
-        previewBox.style.right='0';previewBox.style.bottom='0';
-        previewBox.style.background='rgba(0,0,0,0.6)';
-        previewBox.style.display='flex';previewBox.style.justifyContent='center';
-        previewBox.style.alignItems='center';previewBox.style.padding='20px';
-        previewBox.innerHTML=`<div style="background:white;border-radius:12px;max-width:420px;width:90%;padding:18px;font-size:18px;">
-          <h2 style='font-size:20px;color:var(--azul);margin-top:0;'>Pré-visualização</h2>
-          <pre style='white-space:pre-wrap;font-family:monospace;font-size:17px;'>${txt}</pre>
-          <div style='text-align:right;margin-top:14px;'>
-            <button id='closePrev' style='padding:10px 18px;border:none;background:var(--laranja);color:#fff;border-radius:8px;font-size:17px;'>Fechar</button>
-          </div>
-        </div>`;
-        document.body.appendChild(previewBox);
-        document.getElementById('closePrev').addEventListener('click',()=>document.body.removeChild(previewBox));
-      });
-
-      sendBtn.addEventListener('click',()=>{
-        if(!validar())return;
-        const txt=gerarTexto();
-        enviarParaWhatsApp(txt);
-      });
-
-      repeatBtn.addEventListener('click',()=>{
-        const saved=JSON.parse(localStorage.getItem('qrvLast')||'{}');
-        if(saved.vt||saved.equipe||saved.qth){
-          vt.value=saved.vt||'';equipe.value=saved.equipe||'';qth.value=saved.qth||'';
-          atualizarPreview();showToast('QRV anterior carregado');
-        }else showToast('Nenhum QRV anterior encontrado');
-      });
-
-      form.addEventListener('submit',e=>{e.preventDefault();sendBtn.click();});
-    })();
-  </script>
+function enviarQRV(){
+  const vt=document.getElementById('vt').value.trim();
+  const eq=document.getElementById('equipe').value.trim();
+  const qru=document.getElementById('qru').value.trim();
+  const qth=document.getElementById('qth').value.trim();
+  if(!vt||!eq||!qru||!qth){alert('Preencha todos os campos');return;}
+  const msg=`VT ${vt}\n${eq} (Condutor)\nQRU: ${qru}\nQTH: ${qth}`;
+  const encoded=encodeURIComponent(msg);
+  window.location.href=`whatsapp://send?text=${encoded}`;
+}
+</script>
 </body>
 </html>
