@@ -32,7 +32,7 @@ html,body{
 }
 .view{
   position:absolute;top:0;left:0;width:100%;height:100%;
-  transition:transform .35s cubic-bezier(.23,1,.32,1);
+  transition:transform .5s cubic-bezier(.25,.8,.25,1);
   background:var(--fundo);
 }
 .hidden-right{transform:translateX(100%);}
@@ -58,15 +58,16 @@ h1{
 }
 .theme-toggle svg{width:22px;height:22px;}
 
-/* GRADE DE BOTÕES */
+
 .painel{
   display:grid;
   grid-template-columns:1fr 1fr;
   grid-template-rows:repeat(3,1fr);
-  gap:18px;
-  width:84vw;max-width:400px;
-  height:68vh;
-  margin:auto;margin-top:2vh;
+  gap:clamp(14px,2vh,20px);
+  width:84vw;
+  max-width:400px;
+  height:calc(100vh - 220px); /* Reserva espaço para header + barra inferior */
+  margin:2vh auto;
 }
 .btn{
   border:none;border-radius:20px;
@@ -113,55 +114,92 @@ h1{
 .btn-central{color:var(--laranja);}
 
 /* FORMULÁRIO QRV */
+/* SUBSTITUA a seção de FORMULÁRIO por: */
+
 .card{
   background:var(--fundo);
   border-radius:20px;
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
-  padding:20px;
-  width:85%;
+  padding:24px;
+  width:86%;
   max-width:420px;
   margin:auto;
 }
+
 label{
   display:block;
-  font-size:15px;
-  font-weight:600;
-  margin-top:12px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.5px;
+  margin-top:16px;
+  margin-bottom:8px;
+  color:var(--laranja); /* ← destaque laranja */
+  text-transform:uppercase;
 }
+
 input{
   width:100%;
   border:none;
   outline:none;
   background:var(--fundo);
-  box-shadow:inset 6px 6px 12px var(--sombra),
-             inset -6px -6px 12px var(--luz);
-  border-radius:12px;
-  padding:14px 16px;
-  font-size:16px;
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+  border-radius:14px;
+  padding:16px 18px;
+  font-size:17px;
   font-weight:600;
   color:var(--texto);
   text-transform:uppercase;
-  margin-top:6px;
+  transition:box-shadow .2s ease;
 }
+
 input:focus{
-  box-shadow:inset 4px 4px 8px var(--sombra), inset -4px -4px 8px var(--luz);
+  box-shadow:inset 3px 3px 8px var(--sombra), 
+             inset -3px -3px 8px var(--luz),
+             0 0 0 3px rgba(249,115,22,0.15); /* ← anel laranja ao focar */
 }
+
+input::placeholder{
+  color:var(--cinza);
+  opacity:0.6;
+  font-weight:500;
+}
+
 .send-area{
-  display:flex;gap:10px;justify-content:center;margin-top:16px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:24px;
 }
+
 .primary-btn{
-  background:var(--laranja);color:#fff;border:none;
-  border-radius:14px;padding:14px 28px;
-  font-size:16px;font-weight:700;
-  box-shadow:6px 6px 12px #c5cad3, -6px -6px 12px #fff;
+  background:linear-gradient(145deg, #ff8a47, #f97316);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:14px 28px;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:6px 6px 12px #c5cad3, 
+             -6px -6px 12px #fff,
+             inset 0 1px 2px rgba(255,255,255,0.3);
   transition:all .12s ease-in-out;
 }
 .primary-btn:active{
-  box-shadow:inset 6px 6px 12px #c5cad3, inset -6px -6px 12px #fff;
+  box-shadow:inset 6px 6px 12px #c5cad3, 
+             inset -6px -6px 12px #fff;
   transform:scale(.98);
 }
 
-/* MODO ESCURO */
+/* Modo escuro - ajustes */
+.dark .primary-btn{
+  background:linear-gradient(145deg, #ff8a47, #f97316);
+  box-shadow:6px 6px 12px #060910, 
+             -6px -6px 12px #1b2434,
+             inset 0 1px 2px rgba(255,138,71,0.2);
+}
+
+
 .dark{
   --fundo:#0e1624;
   --sombra:#060910;
