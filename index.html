@@ -3,105 +3,156 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>QRV Operacional — Sistema Integrado</title>
+<title>Painel Operacional — Trânsito Fortaleza</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
   --fundo:#e9eef5;
   --sombra:#c5cad3;
   --luz:#ffffff;
   --laranja:#f97316;
-  --azul:#2563eb;
-  --cinza:#475569;
-  --texto:#0f172a;
   --vermelho:#dc2626;
+  --texto:#0f172a;
   --verde:#16a34a;
+  --azul:#2563eb;
   --amarelo:#facc15;
-  --roxo:#7e22ce;
+  --cinza:#475569;
 }
+
+/* BASE */
 html,body{
-  margin:0;height:100%;
+  margin:0;height:100%;width:100%;
   background:var(--fundo);
   font-family:'Inter',system-ui,sans-serif;
   color:var(--texto);
   overflow:hidden;
   -webkit-tap-highlight-color:transparent;
+  transition:background .3s ease,color .3s ease;
 }
 .view{
   position:absolute;top:0;left:0;width:100%;height:100%;
   transition:transform .35s cubic-bezier(.23,1,.32,1);
-  overflow-y:auto;box-sizing:border-box;
   background:var(--fundo);
 }
 .hidden-right{transform:translateX(100%);}
 .hidden-left{transform:translateX(-100%);}
 .active{transform:translateX(0);}
-h1{
-  font-size:20px;text-align:center;margin:0 0 10px;
-  color:var(--laranja);font-weight:700;
+
+/* CABEÇALHO */
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 16px;
 }
-button{cursor:pointer;outline:none;border:none;}
-/* Painel principal */
+h1{
+  font-size:clamp(18px,4vw,22px);
+  color:var(--laranja);
+  letter-spacing:0.4px;
+  font-weight:700;
+  text-shadow:1px 1px 2px var(--luz);
+  margin:0;
+}
+.theme-toggle{
+  background:none;border:none;color:var(--texto);
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+}
+.theme-toggle svg{width:22px;height:22px;}
+
+/* GRADE DE BOTÕES */
 .painel{
   display:grid;
   grid-template-columns:1fr 1fr;
   grid-template-rows:repeat(3,1fr);
-  gap:22px;
-  width:84vw;max-width:400px;height:75vh;
-  margin:auto;margin-top:6vh;
+  gap:18px;
+  width:84vw;max-width:400px;
+  height:68vh;
+  margin:auto;margin-top:2vh;
 }
 .btn{
-  border:none;border-radius:20px;background:var(--fundo);
+  border:none;border-radius:20px;
+  background:var(--fundo);
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-size:15px;font-weight:700;color:#1e293b;
-  transition:all .12s ease-in-out;padding:20px 0;
+  font-size:15px;font-weight:700;color:var(--texto);
+  transition:all .12s ease-in-out;
 }
 .btn:active{
   box-shadow:inset 8px 8px 16px var(--sombra),
               inset -8px -8px 16px var(--luz);
   transform:scale(.97);
 }
-.icon{font-size:32px;margin-bottom:6px;}
-.qrv .icon{color:var(--laranja);}
-.rendicao .icon{color:var(--cinza);}
-.foto .icon{color:var(--azul);}
-.cones .icon{color:var(--amarelo);}
-.apoio .icon{color:var(--vermelho);}
-.chat .icon{color:var(--verde);}
+.btn svg{width:28px;height:28px;margin-bottom:6px;}
+.qrv svg{stroke:var(--laranja);}
+.rendicao svg{stroke:var(--cinza);}
+.foto svg{stroke:var(--azul);}
+.cones svg{stroke:var(--amarelo);}
+.apoio svg{stroke:var(--vermelho);}
+.chat svg{stroke:var(--verde);}
 
-/* Cabeçalho */
-.header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;
+/* BARRA INFERIOR */
+.bottom-bar{
+  position:absolute;bottom:0;left:0;width:100%;
+  display:flex;justify-content:space-evenly;align-items:center;
+  padding:16px 0;background:var(--fundo);
+  box-shadow:0 -6px 16px rgba(0,0,0,0.05);
 }
-.header button{
-  background:none;border:none;font-size:26px;font-weight:700;
-  color:var(--texto);
-}
-.header .toggle-mode{font-size:22px;cursor:pointer;}
-
-/* Cartões e campos */
-.card{
-  background:var(--fundo);border-radius:20px;
+.bottom-btn{
+  width:40%;max-width:150px;height:58px;
+  border-radius:40px;font-weight:700;font-size:15px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .15s ease-in-out;
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
-  padding:20px;margin:0 16px;
+  background:var(--fundo);
 }
-label{font-size:15px;font-weight:600;}
-input,textarea{
-  width:100%;border:none;outline:none;
+.bottom-btn svg{width:20px;height:20px;}
+.bottom-btn:active{
+  box-shadow:inset 8px 8px 16px var(--sombra), inset -8px -8px 16px var(--luz);
+  transform:scale(.96);
+}
+.btn-emergencia{color:var(--vermelho);}
+.btn-central{color:var(--laranja);}
+
+/* FORMULÁRIO QRV */
+.card{
+  background:var(--fundo);
+  border-radius:20px;
+  box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
+  padding:20px;
+  width:85%;
+  max-width:420px;
+  margin:auto;
+}
+label{
+  display:block;
+  font-size:15px;
+  font-weight:600;
+  margin-top:12px;
+}
+input{
+  width:100%;
+  border:none;
+  outline:none;
   background:var(--fundo);
   box-shadow:inset 6px 6px 12px var(--sombra),
              inset -6px -6px 12px var(--luz);
-  border-radius:12px;padding:14px 16px;
-  font-size:17px;font-weight:600;margin-top:8px;
-  color:var(--texto);text-transform:uppercase;
+  border-radius:12px;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:600;
+  color:var(--texto);
+  text-transform:uppercase;
+  margin-top:6px;
 }
-textarea{min-height:100px;resize:vertical;}
-.send-area{display:flex;gap:10px;padding:16px;}
+input:focus{
+  box-shadow:inset 4px 4px 8px var(--sombra), inset -4px -4px 8px var(--luz);
+}
+.send-area{
+  display:flex;gap:10px;justify-content:center;margin-top:16px;
+}
 .primary-btn{
-  flex:1;background:var(--laranja);color:#fff;border:none;
-  border-radius:14px;font-size:18px;font-weight:700;
+  background:var(--laranja);color:#fff;border:none;
+  border-radius:14px;padding:14px 28px;
+  font-size:16px;font-weight:700;
   box-shadow:6px 6px 12px #c5cad3, -6px -6px 12px #fff;
   transition:all .12s ease-in-out;
 }
@@ -110,112 +161,96 @@ textarea{min-height:100px;resize:vertical;}
   transform:scale(.98);
 }
 
-/* Barra inferior - emergência e central */
-.bottom-bar{
-  position:fixed;bottom:0;left:0;width:100%;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:14px 0;background:var(--fundo);
-  box-shadow:0 -6px 16px rgba(0,0,0,0.05);
-}
-.bottom-btn{
-  width:46%;max-width:160px;padding:14px 0;
-  border-radius:20px;font-weight:700;font-size:16px;
-  box-shadow:6px 6px 12px #c5cad3, -6px -6px 12px #fff;
-  transition:all .12s ease-in-out;
-}
-.bottom-btn:active{
-  box-shadow:inset 6px 6px 12px #c5cad3,inset -6px -6px 12px #fff;
-  transform:scale(.98);
-}
-.btn-emergencia{
-  background:var(--vermelho);color:#fff;
-}
-.btn-central{
-  background:var(--laranja);color:#fff;
-}
-
-/* Tema escuro refinado */
+/* MODO ESCURO */
 .dark{
-  --fundo:#101827;
-  --sombra:#070a12;
-  --luz:#1c2231;
+  --fundo:#0e1624;
+  --sombra:#060910;
+  --luz:#1b2434;
   --texto:#e6eef8;
 }
-.dark .btn{
-  color:#e6eef8;
-  box-shadow:8px 8px 16px #070a12, -8px -8px 16px #1c2231;
+.dark .btn,.dark .bottom-btn,.dark .card{
+  box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
 }
-.dark .btn:active{
-  box-shadow:inset 8px 8px 16px #070a12, inset -8px -8px 16px #1c2231;
-}
-.dark input, .dark textarea{
-  box-shadow:inset 6px 6px 12px #070a12, inset -6px -6px 12px #1c2231;
-}
-.dark .card{
-  box-shadow:8px 8px 16px #070a12, -8px -8px 16px #1c2231;
-}
-.dark h1{color:#f97316;}
+.dark h1{color:#f97316;text-shadow:none;}
+.dark .btn-emergencia{color:#ef4444;}
+.dark .btn-central{color:#f97316;}
+.dark .theme-toggle{color:#e6eef8;}
 </style>
 </head>
 <body>
 
-<!-- MENU -->
+<!-- MENU PRINCIPAL -->
 <div id="menuView" class="view active">
-  <h1>QRV Operacional</h1>
+  <header>
+    <h1>Painel Operacional</h1>
+    <button class="theme-toggle" id="themeToggle" title="Alternar tema"><i data-lucide="moon"></i></button>
+  </header>
+
   <div class="painel">
-    <button class="btn qrv" onclick="abrir('qrvView')"><div class="icon">🚓</div>QRV</button>
-    <button class="btn rendicao" onclick="abrir('rendView')"><div class="icon">🔄</div>RENDIÇÃO</button>
-    <button class="btn foto" onclick="abrir('fotoView')"><div class="icon">📸</div>FOTO</button>
-    <button class="btn cones" onclick="abrir('conesView')"><div class="icon">🧱</div>CONES</button>
-    <button class="btn apoio" onclick="abrir('apoioView')"><div class="icon">🚧</div>APOIO</button>
-    <button class="btn chat" onclick="abrir('chatView')"><div class="icon">💬</div>CHAT</button>
+    <button class="btn qrv" onclick="abrir('qrvView')"><i data-lucide="radio"></i>QRV</button>
+    <button class="btn rendicao" onclick="abrir('rendView')"><i data-lucide="refresh-ccw"></i>Rendição</button>
+    <button class="btn foto" onclick="abrir('fotoView')"><i data-lucide="camera"></i>Foto</button>
+    <button class="btn cones" onclick="abrir('conesView')"><i data-lucide="traffic-cone"></i>Cones</button>
+    <button class="btn apoio" onclick="abrir('apoioView')"><i data-lucide="life-buoy"></i>Apoio</button>
+    <button class="btn chat" onclick="abrir('chatView')"><i data-lucide="messages-square"></i>Chat</button>
   </div>
+
   <div class="bottom-bar">
-    <button class="bottom-btn btn-emergencia" onclick="acionarEmergencia()">🆘 Emergência</button>
-    <button class="bottom-btn btn-central" onclick="ligarCentral()">📞 Central</button>
+    <button class="bottom-btn btn-emergencia" id="emergenciaBtn"><i data-lucide="alert-triangle"></i>Emergência</button>
+    <button class="bottom-btn btn-central" onclick="ligarCentral()"><i data-lucide="phone"></i>Central</button>
   </div>
 </div>
 
-<!-- QRV -->
+<!-- VIEW QRV -->
 <div id="qrvView" class="view hidden-right">
-  <div class="header">
-    <button onclick="voltar('qrvView')">⬅️</button>
-    <div class="toggle-mode" onclick="toggleModo()">☀️</div>
-  </div>
-  <div class="card">
-    <label>VIATURA (VT)</label>
-    <input id="vt" placeholder="Ex: 222">
-    <label>EQUIPE</label>
-    <input id="equipe" placeholder="Condutor, Tripulante, Tripulante">
-    <label>QRU</label>
-    <input list="qruList" id="qru" placeholder="Selecione ou digite...">
-    <datalist id="qruList">
-      <option value="CONTROLE DE TRÁFEGO">
-      <option value="APOIO OPERACIONAL">
-      <option value="ACIDENTE">
-      <option value="RETIRADA DE OBSTÁCULO">
-      <option value="DESLOCAMENTO">
-      <option value="ABORDAGEM">
-      <option value="PATRULHAMENTO">
-      <option value="OUTROS">
-    </datalist>
-    <label>QTH</label>
-    <input id="qth" placeholder="Ex: RUA 01 x RUA 02">
-  </div>
-  <div class="send-area">
-    <button class="primary-btn" onclick="enviarQRV()">ENVIAR</button>
+  <header>
+    <button onclick="voltar('qrvView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
+    <h1>QRV Operacional</h1>
+    <div style="width:32px;"></div>
+  </header>
+
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:85%;">
+    <form id="qrvForm" class="card" autocomplete="off">
+      <label for="vt">Viatura (VT)</label>
+      <input id="vt" type="text" inputmode="numeric" placeholder="Ex: 222" required>
+
+      <label for="equipe">Equipe</label>
+      <input id="equipe" type="text" placeholder="Condutor, Tripulante, Tripulante" required>
+
+      <label for="qru">QRU</label>
+      <input list="qruList" id="qru" placeholder="Selecione ou digite..." required>
+      <datalist id="qruList">
+        <option value="CONTROLE DE TRÁFEGO">
+        <option value="APOIO OPERACIONAL">
+        <option value="ACIDENTE">
+        <option value="RETIRADA DE OBSTÁCULO">
+        <option value="DESLOCAMENTO">
+        <option value="ABORDAGEM">
+        <option value="PATRULHAMENTO">
+        <option value="OUTROS">
+      </datalist>
+
+      <label for="qth">QTH</label>
+      <input id="qth" type="text" placeholder="Ex: RUA 01 X RUA 02" required>
+
+      <div class="send-area">
+        <button type="button" class="primary-btn" onclick="enviarQRV()">Enviar</button>
+      </div>
+    </form>
   </div>
 </div>
 
-<!-- Páginas adicionais -->
-<div id="rendView" class="view hidden-right"><div class="header"><button onclick="voltar('rendView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Rendição (em desenvolvimento)</h2></div></div>
-<div id="fotoView" class="view hidden-right"><div class="header"><button onclick="voltar('fotoView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Registro de foto (em desenvolvimento)</h2></div></div>
-<div id="conesView" class="view hidden-right"><div class="header"><button onclick="voltar('conesView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Gerenciamento de cones (em desenvolvimento)</h2></div></div>
-<div id="apoioView" class="view hidden-right"><div class="header"><button onclick="voltar('apoioView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Solicitação de apoio (em desenvolvimento)</h2></div></div>
-<div id="chatView" class="view hidden-right"><div class="header"><button onclick="voltar('chatView')">⬅️</button><div class="toggle-mode" onclick="toggleModo()">☀️</div></div><div class="card"><h2 style="text-align:center;">Chat operacional (em desenvolvimento)</h2></div></div>
+<!-- OUTRAS VIEWS PLACEHOLDER -->
+<div id="rendView" class="view hidden-right"><header><button onclick="voltar('rendView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Rendição</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<div id="fotoView" class="view hidden-right"><header><button onclick="voltar('fotoView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Foto</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<div id="conesView" class="view hidden-right"><header><button onclick="voltar('conesView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Cones</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<div id="apoioView" class="view hidden-right"><header><button onclick="voltar('apoioView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Apoio</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<div id="chatView" class="view hidden-right"><header><button onclick="voltar('chatView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Chat</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
 
 <script>
-let modoEscuro=false;
+lucide.createIcons();
+
+/* Navegação */
 function abrir(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
@@ -230,28 +265,45 @@ function voltar(id){
   menu.classList.remove('hidden-left');menu.classList.add('active');
   try{navigator.vibrate?.(30);}catch(e){}
 }
-function toggleModo(){
+
+/* Tema */
+const toggle=document.getElementById('themeToggle');
+let dark=localStorage.getItem('theme')==='dark';
+if(dark) document.body.classList.add('dark');
+toggle.addEventListener('click',()=>{
   document.body.classList.toggle('dark');
-  modoEscuro=!modoEscuro;
-  document.querySelectorAll('.toggle-mode').forEach(btn=>{
-    btn.textContent=modoEscuro?'🌙':'☀️';
-  });
-}
+  dark=document.body.classList.contains('dark');
+  localStorage.setItem('theme',dark?'dark':'light');
+  toggle.innerHTML=dark?'<i data-lucide="sun"></i>':'<i data-lucide="moon"></i>';
+  lucide.createIcons();
+});
+
+/* Emergência */
+const emergenciaBtn=document.getElementById('emergenciaBtn');
+let longPress;
+emergenciaBtn.addEventListener('touchstart',()=>{
+  emergenciaBtn.style.transform='scale(0.95)';
+  longPress=setTimeout(()=>window.location.href='tel:190',1200);
+});
+emergenciaBtn.addEventListener('touchend',()=>{
+  clearTimeout(longPress);
+  emergenciaBtn.style.transform='scale(1)';
+});
+function ligarCentral(){window.location.href='tel:+5585XXXXXXXX';}
+
+/* Formulário QRV */
+const vt=document.getElementById('vt');
+const equipe=document.getElementById('equipe');
+const qru=document.getElementById('qru');
+const qth=document.getElementById('qth');
+[vt,qth].forEach(f=>f.addEventListener('focus',()=>f.select()));
+[equipe,qru,qth,vt].forEach(f=>f.addEventListener('input',()=>f.value=f.value.toUpperCase()));
 function enviarQRV(){
-  const vt=document.getElementById('vt').value.trim();
-  const eq=document.getElementById('equipe').value.trim();
-  const qru=document.getElementById('qru').value.trim();
-  const qth=document.getElementById('qth').value.trim();
-  if(!vt||!eq||!qru||!qth){alert('Preencha todos os campos');return;}
-  const msg=`VT ${vt}\n${eq} (Condutor)\nQRU: ${qru}\nQTH: ${qth}`;
-  const encoded=encodeURIComponent(msg);
+  const vtVal=vt.value.trim(), eq=equipe.value.trim(), qruVal=qru.value.trim(), qthVal=qth.value.trim();
+  if(!vtVal||!eq||!qruVal||!qthVal){alert('Preencha todos os campos');return;}
+  const texto=`VT ${vtVal}\n${eq} (CONDUTOR)\nQRU: ${qruVal}\nQTH: ${qthVal}`;
+  const encoded=encodeURIComponent(texto);
   window.location.href=`whatsapp://send?text=${encoded}`;
-}
-function ligarCentral(){
-  window.location.href='tel:+5585XXXXXXXX'; // substitua pelo número real
-}
-function acionarEmergencia(){
-  alert('Segure pressionado para acionar emergência.');
 }
 </script>
 </body>
