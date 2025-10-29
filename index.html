@@ -192,11 +192,9 @@ input::placeholder{
 }
 
 /* Modo escuro - ajustes */
-.dark .primary-btn{
-  background:linear-gradient(145deg, #ff8a47, #f97316);
-  box-shadow:6px 6px 12px #060910, 
-             -6px -6px 12px #1b2434,
-             inset 0 1px 2px rgba(255,138,71,0.2);
+.dark textarea{
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
 }
 
 
@@ -280,9 +278,72 @@ input::placeholder{
 
 <!-- OUTRAS VIEWS PLACEHOLDER -->
 <div id="rendView" class="view hidden-right"><header><button onclick="voltar('rendView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Rendição</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
-<div id="fotoView" class="view hidden-right"><header><button onclick="voltar('fotoView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Foto</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<div id="fotoView" class="view hidden-right">
+  <header>
+    <button onclick="voltar('fotoView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
+    <h1>Registro Fotográfico</h1>
+    <div style="width:32px;"></div>
+  </header>
+
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:85%;overflow-y:auto;padding:20px 0;">
+    <div class="card">
+      <label for="fotoVt">Viatura (VT)</label>
+      <input id="fotoVt" type="text" readonly style="opacity:0.7;">
+
+      <label for="fotoEquipe">Equipe</label>
+      <input id="fotoEquipe" type="text" readonly style="opacity:0.7;">
+
+      <label for="fotoQru">QRU</label>
+      <input id="fotoQru" type="text" readonly style="opacity:0.7;">
+
+      <label for="fotoQth">QTH</label>
+      <input id="fotoQth" type="text" readonly style="opacity:0.7;">
+
+      <div style="margin-top:24px;text-align:center;">
+        <input type="file" id="inputFoto" accept="image/*" capture="environment" style="display:none;">
+        <button type="button" class="primary-btn" onclick="tirarFoto()" style="width:100%;">
+          Tirar Foto
+        </button>
+      </div>
+
+      <div id="previewContainer" style="margin-top:20px;display:none;">
+        <img id="previewFoto" style="width:100%;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button type="button" class="primary-btn" onclick="enviarFoto()" style="flex:1;">Enviar</button>
+          <button type="button" onclick="resetarFoto()" style="flex:1;background:var(--cinza);color:#fff;border:none;border-radius:14px;padding:14px;font-weight:700;box-shadow:6px 6px 12px var(--sombra),-6px -6px 12px var(--luz);">Nova Foto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="conesView" class="view hidden-right"><header><button onclick="voltar('conesView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Cones</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
-<div id="apoioView" class="view hidden-right"><header><button onclick="voltar('apoioView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Apoio</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<div id="apoioView" class="view hidden-right">
+  <header>
+    <button onclick="voltar('apoioView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
+    <h1>Apoio Operacional</h1>
+    <div style="width:32px;"></div>
+  </header>
+
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:85%;">
+    <form id="apoioForm" class="card" autocomplete="off">
+      <label for="apoioVt">Viatura (VT)</label>
+      <input id="apoioVt" type="text" readonly style="opacity:0.7;">
+
+      <label for="apoioCondutor">Condutor</label>
+      <input id="apoioCondutor" type="text" readonly style="opacity:0.7;">
+
+      <label for="apoioQth">QTH</label>
+      <input id="apoioQth" type="text" readonly style="opacity:0.7;">
+
+      <label for="apoioObs">Observação (Opcional)</label>
+      <textarea id="apoioObs" placeholder="COMPLEMENTO..." style="width:100%;border:none;outline:none;background:var(--fundo);box-shadow:inset 5px 5px 10px var(--sombra),inset -5px -5px 10px var(--luz);border-radius:14px;padding:16px 18px;font-size:17px;font-weight:600;color:var(--texto);text-transform:uppercase;margin-top:6px;min-height:80px;resize:vertical;"></textarea>
+
+      <div class="send-area">
+        <button type="button" class="primary-btn" onclick="solicitarApoio()">Solicitar Apoio</button>
+      </div>
+    </form>
+  </div>
+</div>
 <div id="chatView" class="view hidden-right"><header><button onclick="voltar('chatView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Chat</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
 
 <script>
@@ -292,10 +353,40 @@ lucide.createIcons();
 function abrir(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
+  
+  // Se abrindo FOTO ou APOIO, carrega dados do QRV
+  if(id==='fotoView' || id==='apoioView'){
+    const vtVal=vt.value.trim();
+    const eqVal=equipe.value.trim();
+    const qruVal=qru.value.trim();
+    const qthVal=qth.value.trim();
+    
+    if(!vtVal||!eqVal||!qruVal||!qthVal){
+      alert('Preencha o QRV primeiro');
+      return;
+    }
+    
+    // Extrai apenas o condutor (primeiro nome da equipe)
+    const condutor=eqVal.split(',')[0].trim();
+    
+    if(id==='fotoView'){
+      document.getElementById('fotoVt').value=vtVal;
+      document.getElementById('fotoEquipe').value=eqVal;
+      document.getElementById('fotoQru').value=qruVal;
+      document.getElementById('fotoQth').value=qthVal;
+    }else if(id==='apoioView'){
+      document.getElementById('apoioVt').value=vtVal;
+      document.getElementById('apoioCondutor').value=condutor;
+      document.getElementById('apoioQth').value=qthVal;
+      document.getElementById('apoioObs').value='';
+    }
+  }
+  
   menu.classList.remove('active');menu.classList.add('hidden-left');
   tela.classList.remove('hidden-right');tela.classList.add('active');
   try{navigator.vibrate?.(40);}catch(e){}
 }
+
 function voltar(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
@@ -343,6 +434,86 @@ function enviarQRV(){
   const encoded=encodeURIComponent(texto);
   window.location.href=`whatsapp://send?text=${encoded}`;
 }
+
+/* === FOTO === */
+let fotoBlob=null;
+
+function tirarFoto(){
+  document.getElementById('inputFoto').click();
+}
+
+document.getElementById('inputFoto').addEventListener('change',(e)=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  
+  fotoBlob=file;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
+    document.getElementById('previewFoto').src=ev.target.result;
+    document.getElementById('previewContainer').style.display='block';
+  };
+  reader.readAsDataURL(file);
+});
+
+function resetarFoto(){
+  fotoBlob=null;
+  document.getElementById('inputFoto').value='';
+  document.getElementById('previewFoto').src='';
+  document.getElementById('previewContainer').style.display='none';
+}
+
+function enviarFoto(){
+  if(!fotoBlob){alert('Tire uma foto primeiro');return;}
+  
+  const vtVal=document.getElementById('fotoVt').value;
+  const eqVal=document.getElementById('fotoEquipe').value;
+  const qruVal=document.getElementById('fotoQru').value;
+  const qthVal=document.getElementById('fotoQth').value;
+  
+  const msg=`📸 REGISTRO FOTOGRÁFICO\n\nVT ${vtVal}\n${eqVal}\nQRU: ${qruVal}\nQTH: ${qthVal}`;
+  
+  // Tenta usar API nativa de compartilhamento (funciona em Android/iOS modernos)
+  if(navigator.share){
+    const fotoFile=new File([fotoBlob],'registro.jpg',{type:'image/jpeg'});
+    navigator.share({
+      title:'Registro Operacional',
+      text:msg,
+      files:[fotoFile]
+    }).then(()=>{
+      resetarFoto();
+      voltar('fotoView');
+    }).catch(err=>{
+      // Fallback se usuário cancelar
+      console.log('Compartilhamento cancelado');
+    });
+  }else{
+    // Navegadores que não suportam navigator.share
+    alert('Foto capturada!\n\nPara enviar:\n1. Abra o WhatsApp\n2. Cole a mensagem\n3. Anexe a foto manualmente');
+    navigator.clipboard.writeText(msg);
+    resetarFoto();
+  }
+}
+
+/* === APOIO === */
+function solicitarApoio(){
+  const vtVal=document.getElementById('apoioVt').value;
+  const condutor=document.getElementById('apoioCondutor').value;
+  const qthVal=document.getElementById('apoioQth').value;
+  const obs=document.getElementById('apoioObs').value.trim();
+  
+  let msg=`Viatura equipe: ${condutor} VT: ${vtVal} solicita apoio em QTH: ${qthVal}`;
+  
+  if(obs){
+    msg+=`\nObservação: ${obs}`;
+  }
+  
+  const encoded=encodeURIComponent(msg);
+  window.location.href=`whatsapp://send?text=${encoded}`;
+  
+  // Limpa observação após enviar
+  document.getElementById('apoioObs').value='';
+}
+
 </script>
 </body>
 </html>
