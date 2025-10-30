@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
 <title>Painel Operacional — Trânsito Fortaleza</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,12 +30,17 @@ html,body{
   overflow:hidden;
   -webkit-tap-highlight-color:transparent;
   transition:background .3s ease,color .3s ease;
+  touch-action:pan-y;
 }
 .view{
   position:absolute;top:0;left:0;width:100%;height:100%;
   transition:transform .5s cubic-bezier(.25,.8,.25,1);
   background:var(--fundo);
+  overflow:hidden;
+}
+.view-scrollable{
   overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .hidden-right{transform:translateX(100%);}
 .hidden-left{transform:translateX(-100%);}
@@ -207,7 +212,7 @@ textarea{
   transform:scale(.98);
 }
 
-/* RATT - REVEZAMENTO */
+/* RATT - REVEZAMENTO APRIMORADO */
 .ratt-config{
   display:grid;
   gap:12px;
@@ -241,55 +246,150 @@ textarea{
              -6px -6px 12px var(--luz);
 }
 
-.ratt-display{
-  background:var(--fundo);
-  border-radius:16px;
-  padding:20px;
-  box-shadow:inset 5px 5px 10px var(--sombra),
-             inset -5px -5px 10px var(--luz);
+/* CRONÔMETRO CIRCULAR */
+.ratt-circular-timer{
+  position:relative;
+  width:200px;
+  height:200px;
+  margin:20px auto;
+}
+
+.timer-circle{
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  transform:rotate(-90deg);
+}
+
+.timer-bg{
+  fill:none;
+  stroke:var(--sombra);
+  stroke-width:12;
+}
+
+.timer-progress{
+  fill:none;
+  stroke:var(--roxo);
+  stroke-width:12;
+  stroke-linecap:round;
+  transition:stroke-dashoffset .3s ease;
+}
+
+.timer-center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
   text-align:center;
 }
 
-.ratt-clock{
-  font-size:28px;
-  font-weight:700;
-  color:var(--laranja);
-  margin-bottom:8px;
-}
-
-.ratt-timer{
-  font-size:48px;
+.timer-display{
+  font-size:32px;
   font-weight:700;
   color:var(--roxo);
-  margin:16px 0;
   font-variant-numeric:tabular-nums;
 }
 
-.ratt-status{
-  margin-top:16px;
-  padding-top:16px;
-  border-top:1px solid var(--sombra);
+.timer-label{
+  font-size:12px;
+  color:var(--cinza);
+  font-weight:600;
+  margin-top:4px;
 }
 
-.ratt-status-line{
+/* PROGRESSO DO TURNO */
+.turno-progress{
+  background:var(--fundo);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+  margin-bottom:20px;
+}
+
+.turno-times{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  font-size:14px;
+  font-weight:600;
+  color:var(--texto);
+}
+
+.progress-bar{
+  height:8px;
+  background:var(--sombra);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--roxo), var(--laranja));
+  transition:width .3s ease;
+  border-radius:4px;
+}
+
+/* CARDS DE OPERADORES */
+.operators-grid{
+  display:grid;
+  gap:12px;
+  margin-top:16px;
+}
+
+.operator-card{
+  background:var(--fundo);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:6px 6px 12px var(--sombra), 
+             -6px -6px 12px var(--luz);
   display:flex;
   align-items:center;
-  gap:8px;
-  margin:8px 0;
-  font-size:14px;
+  gap:12px;
+  transition:all .3s ease;
 }
 
-.ratt-status-line strong{
-  color:var(--laranja);
-  min-width:100px;
-  text-align:right;
+.operator-card.active{
+  background:linear-gradient(135deg, #a855f7, #9333ea);
+  color:#fff;
+  box-shadow:8px 8px 16px var(--sombra), 
+             -8px -8px 16px var(--luz);
 }
 
-.ratt-names{
+.operator-icon{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--fundo);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:16px;
+  box-shadow:inset 3px 3px 6px var(--sombra),
+             inset -3px -3px 6px var(--luz);
+}
+
+.operator-card.active .operator-icon{
+  background:rgba(255,255,255,0.2);
+  box-shadow:inset 2px 2px 4px rgba(0,0,0,0.2);
+  color:#fff;
+}
+
+.operator-info{
   flex:1;
-  text-align:left;
-  color:var(--texto);
-  font-weight:600;
+}
+
+.operator-name{
+  font-weight:700;
+  font-size:15px;
+}
+
+.operator-status{
+  font-size:12px;
+  opacity:0.7;
+  margin-top:2px;
 }
 
 .ratt-controls{
@@ -365,9 +465,20 @@ textarea{
   box-shadow:6px 6px 12px var(--sombra), 
              -6px -6px 12px var(--luz);
 }
-.dark .ratt-display{
-  box-shadow:inset 5px 5px 10px var(--sombra),
-             inset -5px -5px 10px var(--luz);
+.dark .timer-bg{
+  stroke:var(--sombra);
+}
+.dark .operator-icon{
+  box-shadow:inset 3px 3px 6px var(--sombra),
+             inset -3px -3px 6px var(--luz);
+}
+.dark .operator-card{
+  box-shadow:6px 6px 12px var(--sombra), 
+             -6px -6px 12px var(--luz);
+}
+.dark .operator-card.active{
+  box-shadow:8px 8px 16px var(--sombra), 
+             -8px -8px 16px var(--luz);
 }
 </style>
 </head>
@@ -433,14 +544,14 @@ textarea{
 </div>
 
 <!-- VIEW FOTO -->
-<div id="fotoView" class="view hidden-right">
+<div id="fotoView" class="view view-scrollable hidden-right">
   <header>
     <button onclick="voltar('fotoView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
     <h1>Registro Fotográfico</h1>
     <div style="width:32px;"></div>
   </header>
 
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:85%;overflow-y:auto;padding:20px 0;">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:85%;padding:20px 0;">
     <div class="card">
       <label for="fotoVt">Viatura (VT)</label>
       <input id="fotoVt" type="text" readonly style="opacity:0.7;">
@@ -502,7 +613,7 @@ textarea{
 </div>
 
 <!-- VIEW RATT (REVEZAMENTO) -->
-<div id="rattView" class="view hidden-right">
+<div id="rattView" class="view view-scrollable hidden-right">
   <header>
     <button onclick="voltar('rattView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
     <h1>Revezamento</h1>
@@ -527,7 +638,7 @@ textarea{
 
         <div>
           <label>Tempo por Ciclo</label>
-          <div class="ratt-toggle-group">
+          <div id="tempoToggleGroup" class="ratt-toggle-group">
             <button type="button" class="ratt-toggle-btn" onclick="setTempoCiclo(20)">20 min</button>
             <button type="button" class="ratt-toggle-btn active" onclick="setTempoCiclo(30)">30 min</button>
             <button type="button" class="ratt-toggle-btn" onclick="setTempoCiclo(60)">60 min</button>
@@ -536,7 +647,7 @@ textarea{
 
         <div>
           <label>Operadores por Vez</label>
-          <div class="ratt-toggle-group">
+          <div id="modoToggleGroup" class="ratt-toggle-group">
             <button type="button" class="ratt-toggle-btn" onclick="setModo(1)">1</button>
             <button type="button" class="ratt-toggle-btn active" onclick="setModo(2)">2</button>
             <button type="button" class="ratt-toggle-btn" onclick="setModo(3)">3</button>
@@ -557,34 +668,44 @@ textarea{
 
     <!-- DISPLAY ATIVO -->
     <div id="rattDisplay" class="card" style="display:none;margin-top:20px;">
-      <div class="ratt-display">
-        <div class="ratt-clock" id="rattClock">--:--:--</div>
-        <div class="ratt-timer" id="rattTimer">00:00:00</div>
-        
-        <div class="ratt-status">
-          <div class="ratt-status-line">
-            <strong>Em Campo:</strong>
-            <span class="ratt-names" id="rattAtivos">--</span>
-          </div>
-          <div class="ratt-status-line">
-            <strong>Descansando:</strong>
-            <span class="ratt-names" id="rattDescansando">--</span>
-          </div>
-          <div class="ratt-status-line">
-            <strong>Próximos:</strong>
-            <span class="ratt-names" id="rattProximos">--</span>
-          </div>
+      
+      <!-- PROGRESSO DO TURNO -->
+      <div class="turno-progress">
+        <div class="turno-times">
+          <span id="turnoInicio">07:00</span>
+          <span id="turnoAtual">--:--</span>
+          <span id="turnoFim">13:00</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="turnoProgressBar" style="width:0%;"></div>
         </div>
       </div>
 
+      <!-- CRONÔMETRO CIRCULAR -->
+      <div class="ratt-circular-timer">
+        <svg class="timer-circle" viewBox="0 0 200 200">
+          <circle class="timer-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="timer-progress" id="timerCircle" cx="100" cy="100" r="90"
+                  stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="timer-center">
+          <div class="timer-display" id="rattTimer">00:00</div>
+          <div class="timer-label">Tempo Restante</div>
+        </div>
+      </div>
+
+      <!-- OPERADORES -->
+      <div class="operators-grid" id="operatorsGrid"></div>
+
       <div class="ratt-controls">
-        <button type="button" class="ratt-btn ratt-btn-secondary" onclick="pausarRATT()">Pausar</button>
+        <button id="pausarRattBtn" type="button" class="ratt-btn ratt-btn-secondary" onclick="pausarRATT()">Pausar</button>
         <button type="button" class="ratt-btn ratt-btn-primary" onclick="revezarRATT()">Revezar</button>
       </div>
 
       <div class="send-area">
         <button type="button" class="ratt-btn ratt-btn-secondary" onclick="encerrarRATT()" style="width:100%;">Encerrar</button>
       </div>
+
     </div>
 
   </div>
@@ -691,6 +812,7 @@ document.getElementById('inputFoto').addEventListener('change',(e)=>{
   };
   reader.readAsDataURL(file);
 });
+
 function resetarFoto(){
   fotoBlob=null;
   document.getElementById('inputFoto').value='';
@@ -729,7 +851,7 @@ function solicitarApoio(){
   document.getElementById('apoioObs').value='';
 }
 
-/* === RATT (REVEZAMENTO) === */
+/* === RATT (REVEZAMENTO MELHORADO) === */
 let rattState={
   tempoCiclo:30,
   modo:2,
@@ -739,22 +861,31 @@ let rattState={
   iniciado:false,
   pausado:false,
   tempoRestante:0,
+  tempoTotal:0,
   intervalId:null,
   clockId:null,
-  historico:[]
+  historico:[],
+  turnoInicio:null,
+  turnoFim:null
 };
 
 function setTempoCiclo(minutos){
-  rattState.tempoCiclo=minutos;
-  document.querySelectorAll('.ratt-toggle-group .ratt-toggle-btn').forEach((btn,i)=>{
-    btn.classList.toggle('active',[20,30,60][i]===minutos);
+  rattState.tempoCiclo = minutos;
+  const tempoBotoes = document.querySelectorAll('#tempoToggleGroup .ratt-toggle-btn');
+  const valores = [20, 30, 60];
+  
+  tempoBotoes.forEach((btn, i) => {
+    btn.classList.toggle('active', valores[i] === minutos);
   });
 }
 
 function setModo(operadores){
-  rattState.modo=operadores;
-  document.querySelectorAll('.ratt-toggle-group:nth-of-type(2) .ratt-toggle-btn').forEach((btn,i)=>{
-    btn.classList.toggle('active',[1,2,3][i]===operadores);
+  rattState.modo = operadores;
+  const modoBotoes = document.querySelectorAll('#modoToggleGroup .ratt-toggle-btn');
+  
+  modoBotoes.forEach((btn, i) => {
+    const valorBotao = i + 1;
+    btn.classList.toggle('active', valorBotao === operadores);
   });
 }
 
@@ -767,50 +898,90 @@ function iniciarRATT(){
   if(!equipeTexto){alert('Informe a equipe');return;}
   
   rattState.equipe=equipeTexto.split(',').map(n=>n.trim().toUpperCase()).filter(n=>n);
-  if(rattState.equipe.length<rattState.modo){
-    alert(`É necessário ter pelo menos ${rattState.modo} operadores`);
+  if(rattState.equipe.length < rattState.modo){
+    alert(`É necessário ter pelo menos ${rattState.modo} operadores na equipe.`);
     return;
   }
   
+  rattState.turnoInicio=inicio;
+  rattState.turnoFim=fim;
   rattState.grupos=gerarGrupos(rattState.equipe,rattState.modo);
   rattState.cicloAtual=0;
   rattState.tempoRestante=rattState.tempoCiclo*60;
+  rattState.tempoTotal=rattState.tempoCiclo*60;
   rattState.iniciado=true;
   rattState.pausado=false;
   
+  document.getElementById('turnoInicio').textContent=inicio;
+  document.getElementById('turnoFim').textContent=fim;
   document.getElementById('rattConfig').style.display='none';
   document.getElementById('rattDisplay').style.display='block';
   
+  renderizarOperadores();
   atualizarDisplayRATT();
   iniciarTimers();
 }
 
 function gerarGrupos(equipe,tamanho){
   const grupos=[];
-  const total=equipe.length;
-  let offset=0;
-  
-  for(let ciclo=0;ciclo<Math.ceil(total/tamanho)*2;ciclo++){
-    const grupo=[];
-    for(let i=0;i<tamanho;i++){
-      grupo.push(equipe[(offset+i)%total]);
+  for(let i = 0; i < equipe.length; i++){
+    const grupo = [];
+    for(let j = 0; j < tamanho; j++){
+      grupo.push(equipe[(i + j) % equipe.length]);
     }
     grupos.push(grupo);
-    offset+=tamanho;
   }
   return grupos;
 }
 
-function atualizarDisplayRATT(){
-  const grupoAtual=rattState.grupos[rattState.cicloAtual%rattState.grupos.length];
-  const grupoProximo=rattState.grupos[(rattState.cicloAtual+1)%rattState.grupos.length];
-  const descansando=rattState.equipe.filter(op=>!grupoAtual.includes(op));
+function renderizarOperadores(){
+  const container=document.getElementById('operatorsGrid');
+  container.innerHTML='';
   
-  document.getElementById('rattAtivos').textContent=grupoAtual.join(', ');
-  document.getElementById('rattDescansando').textContent=descansando.join(', ')||'--';
-  document.getElementById('rattProximos').textContent=grupoProximo.join(', ');
+  rattState.equipe.forEach((op,idx)=>{
+    const card=document.createElement('div');
+    card.className='operator-card';
+    card.id=`op-${idx}`;
+    
+    const inicial=op.charAt(0);
+    card.innerHTML=`
+      <div class="operator-icon">${inicial}</div>
+      <div class="operator-info">
+        <div class="operator-name">${op}</div>
+        <div class="operator-status">Aguardando...</div>
+      </div>
+    `;
+    
+    container.appendChild(card);
+  });
+}
+
+function atualizarDisplayRATT(){
+  if (rattState.grupos.length === 0) return;
+  
+  const grupoAtual=rattState.grupos[rattState.cicloAtual % rattState.grupos.length];
+  
+  // Atualiza cards dos operadores
+  rattState.equipe.forEach((op,idx)=>{
+    const card=document.getElementById(`op-${idx}`);
+    const status=card.querySelector('.operator-status');
+    
+    if(grupoAtual.includes(op)){
+      card.classList.add('active');
+      status.textContent='Em Campo';
+    }else{
+      card.classList.remove('active');
+      const posProximo=rattState.grupos.findIndex(g=>g.includes(op) && rattState.grupos.indexOf(g) > rattState.cicloAtual);
+      if(posProximo === (rattState.cicloAtual + 1) % rattState.grupos.length){
+        status.textContent='Próximo';
+      }else{
+        status.textContent='Descansando';
+      }
+    }
+  });
   
   atualizarTimer();
+  atualizarProgressoTurno();
 }
 
 function iniciarTimers(){
@@ -818,8 +989,7 @@ function iniciarTimers(){
   if(rattState.intervalId) clearInterval(rattState.intervalId);
   
   rattState.clockId=setInterval(()=>{
-    const agora=new Date();
-    document.getElementById('rattClock').textContent=agora.toLocaleTimeString('pt-BR');
+    atualizarProgressoTurno();
   },1000);
   
   rattState.intervalId=setInterval(()=>{
@@ -834,40 +1004,78 @@ function iniciarTimers(){
 }
 
 function atualizarTimer(){
-  const h=Math.floor(rattState.tempoRestante/3600);
-  const m=Math.floor((rattState.tempoRestante%3600)/60);
+  const m=Math.floor(rattState.tempoRestante/60);
   const s=rattState.tempoRestante%60;
   document.getElementById('rattTimer').textContent=
-    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  
+  // Atualiza círculo
+  const progresso = (rattState.tempoRestante / rattState.tempoTotal) * 565.48;
+  document.getElementById('timerCircle').style.strokeDashoffset = 565.48 - progresso;
+}
+
+function atualizarProgressoTurno(){
+  const agora=new Date();
+  const horaAtual=agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('turnoAtual').textContent=horaAtual;
+  
+  // Calcula progresso do turno
+  const [hInicio,mInicio]=rattState.turnoInicio.split(':').map(Number);
+  const [hFim,mFim]=rattState.turnoFim.split(':').map(Number);
+  const [hAtual,mAtual]=[agora.getHours(),agora.getMinutes()];
+  
+  const minInicio=hInicio*60+mInicio;
+  const minFim=hFim*60+mFim;
+  const minAtual=hAtual*60+mAtual;
+  
+  let progresso=0;
+  if(minAtual>=minInicio && minAtual<=minFim){
+    progresso=((minAtual-minInicio)/(minFim-minInicio))*100;
+  }else if(minAtual>minFim){
+    progresso=100;
+  }
+  
+  document.getElementById('turnoProgressBar').style.width=`${progresso}%`;
 }
 
 function alertaRevezamento(){
-  try{navigator.vibrate?.(500);}catch(e){}
-  if(confirm('Tempo esgotado! Revezar agora?')){
+  try{navigator.vibrate?.([500, 100, 500]);}catch(e){}
+  if(confirm('⏰ Tempo esgotado! Revezar agora?')){
     revezarRATT();
+  }else{
+    // Se não revezar, reseta timer mas mantém grupo
+    rattState.tempoRestante=rattState.tempoCiclo*60;
   }
 }
 
 function revezarRATT(){
-  rattState.cicloAtual++;
-  rattState.tempoRestante=rattState.tempoCiclo*60;
   rattState.historico.push({
-    ciclo:rattState.cicloAtual-1,
-    grupo:rattState.grupos[(rattState.cicloAtual-1)%rattState.grupos.length],
+    ciclo:rattState.cicloAtual,
+    grupo:rattState.grupos[rattState.cicloAtual % rattState.grupos.length],
     hora:new Date().toLocaleTimeString('pt-BR')
   });
+  rattState.cicloAtual++;
+  rattState.tempoRestante=rattState.tempoCiclo*60;
   atualizarDisplayRATT();
   try{navigator.vibrate?.(100);}catch(e){}
 }
 
 function pausarRATT(){
   rattState.pausado=!rattState.pausado;
-  const btn=event.target;
+  const btn=document.getElementById('pausarRattBtn');
   btn.textContent=rattState.pausado?'Retomar':'Pausar';
+  
+  // Feedback visual
+  const timer=document.getElementById('rattTimer');
+  if(rattState.pausado){
+    timer.style.opacity='0.5';
+  }else{
+    timer.style.opacity='1';
+  }
 }
 
 function encerrarRATT(){
-  if(confirm('Encerrar revezamento?')){
+  if(confirm('🛑 Encerrar revezamento? O histórico será salvo.')){
     clearInterval(rattState.intervalId);
     clearInterval(rattState.clockId);
     rattState.iniciado=false;
@@ -882,10 +1090,14 @@ function salvarHistoricoRATT(){
   const hist=JSON.parse(localStorage.getItem('ratt_historico')||'[]');
   hist.push({
     data:data,
-    turno:`${document.getElementById('rattInicio').value}-${document.getElementById('rattFim').value}`,
-    ciclos:rattState.historico
+    turno:`${rattState.turnoInicio}-${rattState.turnoFim}`,
+    ciclos:rattState.historico,
+    equipe:rattState.equipe,
+    modo:rattState.modo,
+    tempoCiclo:rattState.tempoCiclo
   });
   localStorage.setItem('ratt_historico',JSON.stringify(hist.slice(-7)));
+  rattState.historico = [];
 }
 
 </script>
