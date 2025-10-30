@@ -18,6 +18,7 @@
   --azul:#2563eb;
   --amarelo:#facc15;
   --cinza:#475569;
+  --roxo:#9333ea;
 }
 
 /* BASE */
@@ -34,6 +35,7 @@ html,body{
   position:absolute;top:0;left:0;width:100%;height:100%;
   transition:transform .5s cubic-bezier(.25,.8,.25,1);
   background:var(--fundo);
+  overflow-y:auto;
 }
 .hidden-right{transform:translateX(100%);}
 .hidden-left{transform:translateX(-100%);}
@@ -58,15 +60,15 @@ h1{
 }
 .theme-toggle svg{width:22px;height:22px;}
 
-
+/* GRADE DE BOTÕES */
 .painel{
   display:grid;
   grid-template-columns:1fr 1fr;
-  grid-template-rows:repeat(3,1fr);
+  grid-template-rows:repeat(2,1fr);
   gap:14px;
   width:70vw; 
   max-width:380px;
-  height:55vh; /* Reserva espaço para header + barra inferior */
+  height:55vh;
   margin:2vh auto;
 }
 .btn{
@@ -75,7 +77,7 @@ h1{
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   font-size:15px;font-weight:700;color:var(--texto);
-  transition:all .0,5s ease-in-out;
+  transition:all .15s ease-in-out;
 }
 .btn:active{
   box-shadow:inset 8px 8px 16px var(--sombra),
@@ -84,11 +86,9 @@ h1{
 }
 .btn svg{width:28px;height:28px;margin-bottom:6px;}
 .qrv svg{stroke:var(--laranja);}
-.rendicao svg{stroke:var(--cinza);}
 .foto svg{stroke:var(--azul);}
-.cones svg{stroke:var(--amarelo);}
-.apoio svg{stroke:var(--vermelho);}
-.chat svg{stroke:var(--verde);}
+.apoio svg{stroke:var(--verde);}
+.revezamento svg{stroke:var(--roxo);}
 
 /* BARRA INFERIOR */
 .bottom-bar{
@@ -101,7 +101,7 @@ h1{
   width:40%;max-width:150px;height:58px;
   border-radius:40px;font-weight:700;font-size:15px;
   display:flex;align-items:center;justify-content:center;gap:6px;
-  transition:all .0.3s ease-in-out;
+  transition:all .15s ease-in-out;
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
   background:var(--fundo);
 }
@@ -113,9 +113,7 @@ h1{
 .btn-emergencia{color:var(--vermelho);}
 .btn-central{color:var(--laranja);}
 
-/* FORMULÁRIO QRV */
-/* SUBSTITUA a seção de FORMULÁRIO por: */
-
+/* FORMULÁRIOS */
 .card{
   background:var(--fundo);
   border-radius:20px;
@@ -133,11 +131,11 @@ label{
   letter-spacing:0.5px;
   margin-top:16px;
   margin-bottom:8px;
-  color:var(--laranja); /* ← destaque laranja */
+  color:var(--laranja);
   text-transform:uppercase;
 }
 
-input{
+input,select{
   width:100%;
   border:none;
   outline:none;
@@ -153,16 +151,34 @@ input{
   transition:box-shadow .2s ease;
 }
 
-input:focus{
+input:focus,select:focus{
   box-shadow:inset 3px 3px 8px var(--sombra), 
              inset -3px -3px 8px var(--luz),
-             0 0 0 3px rgba(249,115,22,0.15); /* ← anel laranja ao focar */
+             0 0 0 3px rgba(249,115,22,0.15);
 }
 
 input::placeholder{
   color:var(--cinza);
   opacity:0.6;
   font-weight:500;
+}
+
+textarea{
+  width:100%;
+  border:none;
+  outline:none;
+  background:var(--fundo);
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+  border-radius:14px;
+  padding:16px 18px;
+  font-size:17px;
+  font-weight:600;
+  color:var(--texto);
+  text-transform:uppercase;
+  margin-top:6px;
+  min-height:80px;
+  resize:vertical;
 }
 
 .send-area{
@@ -191,13 +207,126 @@ input::placeholder{
   transform:scale(.98);
 }
 
-/* Modo escuro - ajustes */
-.dark textarea{
-  box-shadow:inset 5px 5px 10px var(--sombra),
-             inset -5px -5px 10px var(--luz);
+/* RATT - REVEZAMENTO */
+.ratt-config{
+  display:grid;
+  gap:12px;
+  margin-bottom:20px;
 }
 
+.ratt-toggle-group{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+}
 
+.ratt-toggle-btn{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:var(--fundo);
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+  font-weight:600;
+  font-size:14px;
+  color:var(--texto);
+  transition:all .2s;
+}
+
+.ratt-toggle-btn.active{
+  background:linear-gradient(145deg, #a855f7, #9333ea);
+  color:#fff;
+  box-shadow:6px 6px 12px var(--sombra), 
+             -6px -6px 12px var(--luz);
+}
+
+.ratt-display{
+  background:var(--fundo);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+  text-align:center;
+}
+
+.ratt-clock{
+  font-size:28px;
+  font-weight:700;
+  color:var(--laranja);
+  margin-bottom:8px;
+}
+
+.ratt-timer{
+  font-size:48px;
+  font-weight:700;
+  color:var(--roxo);
+  margin:16px 0;
+  font-variant-numeric:tabular-nums;
+}
+
+.ratt-status{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--sombra);
+}
+
+.ratt-status-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:8px 0;
+  font-size:14px;
+}
+
+.ratt-status-line strong{
+  color:var(--laranja);
+  min-width:100px;
+  text-align:right;
+}
+
+.ratt-names{
+  flex:1;
+  text-align:left;
+  color:var(--texto);
+  font-weight:600;
+}
+
+.ratt-controls{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.ratt-btn{
+  flex:1;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
+  font-size:15px;
+  box-shadow:6px 6px 12px var(--sombra), 
+             -6px -6px 12px var(--luz);
+  transition:all .15s;
+}
+
+.ratt-btn:active{
+  box-shadow:inset 6px 6px 12px var(--sombra), 
+             inset -6px -6px 12px var(--luz);
+  transform:scale(.96);
+}
+
+.ratt-btn-primary{
+  background:linear-gradient(145deg, #a855f7, #9333ea);
+  color:#fff;
+}
+
+.ratt-btn-secondary{
+  background:var(--fundo);
+  color:var(--texto);
+}
+
+/* MODO ESCURO */
 .dark{
   --fundo:#0e1624;
   --sombra:#060910;
@@ -211,6 +340,35 @@ input::placeholder{
 .dark .btn-emergencia{color:#ef4444;}
 .dark .btn-central{color:#f97316;}
 .dark .theme-toggle{color:#e6eef8;}
+.dark label{color:#ff8a47;}
+.dark input,.dark select,.dark textarea{
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+}
+.dark input:focus,.dark select:focus,.dark textarea:focus{
+  box-shadow:inset 3px 3px 8px var(--sombra), 
+             inset -3px -3px 8px var(--luz),
+             0 0 0 3px rgba(249,115,22,0.2);
+}
+.dark .primary-btn{
+  background:linear-gradient(145deg, #ff8a47, #f97316);
+  box-shadow:6px 6px 12px #060910, 
+             -6px -6px 12px #1b2434,
+             inset 0 1px 2px rgba(255,138,71,0.2);
+}
+.dark .ratt-toggle-btn{
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+}
+.dark .ratt-toggle-btn.active{
+  background:linear-gradient(145deg, #a855f7, #9333ea);
+  box-shadow:6px 6px 12px var(--sombra), 
+             -6px -6px 12px var(--luz);
+}
+.dark .ratt-display{
+  box-shadow:inset 5px 5px 10px var(--sombra),
+             inset -5px -5px 10px var(--luz);
+}
 </style>
 </head>
 <body>
@@ -223,12 +381,10 @@ input::placeholder{
   </header>
 
   <div class="painel">
-    <button class="btn qrv" onclick="abrir('qrvView')"><i data-lucide="radio"></i>QRV</button>
-    <button class="btn rendicao" onclick="abrir('rendView')"><i data-lucide="refresh-ccw"></i>Rendição</button>
-    <button class="btn foto" onclick="abrir('fotoView')"><i data-lucide="camera"></i>Foto</button>
-    <button class="btn cones" onclick="abrir('conesView')"><i data-lucide="traffic-cone"></i>Cones</button>
-    <button class="btn apoio" onclick="abrir('apoioView')"><i data-lucide="life-buoy"></i>Apoio</button>
-    <button class="btn chat" onclick="abrir('chatView')"><i data-lucide="messages-square"></i>Chat</button>
+    <button class="btn qrv" onclick="abrir('qrvView')"><i data-lucide="radio"></i>QRV/QRU/QTA</button>
+    <button class="btn foto" onclick="abrir('fotoView')"><i data-lucide="camera"></i>QTH/FOTO</button>
+    <button class="btn apoio" onclick="abrir('apoioView')"><i data-lucide="life-buoy"></i>APOIO</button>
+    <button class="btn revezamento" onclick="abrir('rattView')"><i data-lucide="users"></i>REVEZAMENTO</button>
   </div>
 
   <div class="bottom-bar">
@@ -276,8 +432,7 @@ input::placeholder{
   </div>
 </div>
 
-<!-- OUTRAS VIEWS PLACEHOLDER -->
-<div id="rendView" class="view hidden-right"><header><button onclick="voltar('rendView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Rendição</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+<!-- VIEW FOTO -->
 <div id="fotoView" class="view hidden-right">
   <header>
     <button onclick="voltar('fotoView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
@@ -316,7 +471,8 @@ input::placeholder{
     </div>
   </div>
 </div>
-<div id="conesView" class="view hidden-right"><header><button onclick="voltar('conesView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Cones</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+
+<!-- VIEW APOIO -->
 <div id="apoioView" class="view hidden-right">
   <header>
     <button onclick="voltar('apoioView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
@@ -336,7 +492,7 @@ input::placeholder{
       <input id="apoioQth" type="text" readonly style="opacity:0.7;">
 
       <label for="apoioObs">Observação (Opcional)</label>
-      <textarea id="apoioObs" placeholder="COMPLEMENTO..." style="width:100%;border:none;outline:none;background:var(--fundo);box-shadow:inset 5px 5px 10px var(--sombra),inset -5px -5px 10px var(--luz);border-radius:14px;padding:16px 18px;font-size:17px;font-weight:600;color:var(--texto);text-transform:uppercase;margin-top:6px;min-height:80px;resize:vertical;"></textarea>
+      <textarea id="apoioObs" placeholder="COMPLEMENTO..."></textarea>
 
       <div class="send-area">
         <button type="button" class="primary-btn" onclick="solicitarApoio()">Solicitar Apoio</button>
@@ -344,17 +500,104 @@ input::placeholder{
     </form>
   </div>
 </div>
-<div id="chatView" class="view hidden-right"><header><button onclick="voltar('chatView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button><h1>Chat</h1><div style="width:32px;"></div></header><div style="display:flex;justify-content:center;align-items:center;height:70%;"><p>Em desenvolvimento.</p></div></div>
+
+<!-- VIEW RATT (REVEZAMENTO) -->
+<div id="rattView" class="view hidden-right">
+  <header>
+    <button onclick="voltar('rattView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
+    <h1>Revezamento</h1>
+    <div style="width:32px;"></div>
+  </header>
+
+  <div style="padding:20px;max-width:420px;margin:auto;">
+    
+    <!-- CONFIGURAÇÃO -->
+    <div id="rattConfig" class="card">
+      <div class="ratt-config">
+        
+        <div>
+          <label>Início do Turno</label>
+          <input type="time" id="rattInicio" value="07:00">
+        </div>
+
+        <div>
+          <label>Fim do Turno</label>
+          <input type="time" id="rattFim" value="13:00">
+        </div>
+
+        <div>
+          <label>Tempo por Ciclo</label>
+          <div class="ratt-toggle-group">
+            <button type="button" class="ratt-toggle-btn" onclick="setTempoCiclo(20)">20 min</button>
+            <button type="button" class="ratt-toggle-btn active" onclick="setTempoCiclo(30)">30 min</button>
+            <button type="button" class="ratt-toggle-btn" onclick="setTempoCiclo(60)">60 min</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Operadores por Vez</label>
+          <div class="ratt-toggle-group">
+            <button type="button" class="ratt-toggle-btn" onclick="setModo(1)">1</button>
+            <button type="button" class="ratt-toggle-btn active" onclick="setModo(2)">2</button>
+            <button type="button" class="ratt-toggle-btn" onclick="setModo(3)">3</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Equipe (separados por vírgula)</label>
+          <textarea id="rattEquipe" placeholder="MOURA, RAFAEL, CLÁUDIO, MÁRCIO, DANIEL" style="min-height:60px;"></textarea>
+        </div>
+
+      </div>
+
+      <div class="send-area">
+        <button type="button" class="primary-btn" onclick="iniciarRATT()" style="width:100%;">Iniciar Revezamento</button>
+      </div>
+    </div>
+
+    <!-- DISPLAY ATIVO -->
+    <div id="rattDisplay" class="card" style="display:none;margin-top:20px;">
+      <div class="ratt-display">
+        <div class="ratt-clock" id="rattClock">--:--:--</div>
+        <div class="ratt-timer" id="rattTimer">00:00:00</div>
+        
+        <div class="ratt-status">
+          <div class="ratt-status-line">
+            <strong>Em Campo:</strong>
+            <span class="ratt-names" id="rattAtivos">--</span>
+          </div>
+          <div class="ratt-status-line">
+            <strong>Descansando:</strong>
+            <span class="ratt-names" id="rattDescansando">--</span>
+          </div>
+          <div class="ratt-status-line">
+            <strong>Próximos:</strong>
+            <span class="ratt-names" id="rattProximos">--</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ratt-controls">
+        <button type="button" class="ratt-btn ratt-btn-secondary" onclick="pausarRATT()">Pausar</button>
+        <button type="button" class="ratt-btn ratt-btn-primary" onclick="revezarRATT()">Revezar</button>
+      </div>
+
+      <div class="send-area">
+        <button type="button" class="ratt-btn ratt-btn-secondary" onclick="encerrarRATT()" style="width:100%;">Encerrar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
 lucide.createIcons();
 
-/* Navegação */
+/* === NAVEGAÇÃO === */
 function abrir(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
   
-  // Se abrindo FOTO ou APOIO, carrega dados do QRV
   if(id==='fotoView' || id==='apoioView'){
     const vtVal=vt.value.trim();
     const eqVal=equipe.value.trim();
@@ -366,7 +609,6 @@ function abrir(id){
       return;
     }
     
-    // Extrai apenas o condutor (primeiro nome da equipe)
     const condutor=eqVal.split(',')[0].trim();
     
     if(id==='fotoView'){
@@ -395,7 +637,7 @@ function voltar(id){
   try{navigator.vibrate?.(30);}catch(e){}
 }
 
-/* Tema */
+/* === TEMA === */
 const toggle=document.getElementById('themeToggle');
 let dark=localStorage.getItem('theme')==='dark';
 if(dark) document.body.classList.add('dark');
@@ -407,7 +649,7 @@ toggle.addEventListener('click',()=>{
   lucide.createIcons();
 });
 
-/* Emergência */
+/* === EMERGÊNCIA === */
 const emergenciaBtn=document.getElementById('emergenciaBtn');
 let longPress;
 emergenciaBtn.addEventListener('touchstart',()=>{
@@ -420,7 +662,7 @@ emergenciaBtn.addEventListener('touchend',()=>{
 });
 function ligarCentral(){window.location.href='tel:+5585XXXXXXXX';}
 
-/* Formulário QRV */
+/* === FORMULÁRIO QRV === */
 const vt=document.getElementById('vt');
 const equipe=document.getElementById('equipe');
 const qru=document.getElementById('qru');
@@ -437,15 +679,10 @@ function enviarQRV(){
 
 /* === FOTO === */
 let fotoBlob=null;
-
-function tirarFoto(){
-  document.getElementById('inputFoto').click();
-}
-
+function tirarFoto(){document.getElementById('inputFoto').click();}
 document.getElementById('inputFoto').addEventListener('change',(e)=>{
   const file=e.target.files[0];
   if(!file) return;
-  
   fotoBlob=file;
   const reader=new FileReader();
   reader.onload=(ev)=>{
@@ -454,40 +691,25 @@ document.getElementById('inputFoto').addEventListener('change',(e)=>{
   };
   reader.readAsDataURL(file);
 });
-
 function resetarFoto(){
   fotoBlob=null;
   document.getElementById('inputFoto').value='';
   document.getElementById('previewFoto').src='';
   document.getElementById('previewContainer').style.display='none';
 }
-
 function enviarFoto(){
   if(!fotoBlob){alert('Tire uma foto primeiro');return;}
-  
   const vtVal=document.getElementById('fotoVt').value;
   const eqVal=document.getElementById('fotoEquipe').value;
   const qruVal=document.getElementById('fotoQru').value;
   const qthVal=document.getElementById('fotoQth').value;
-  
   const msg=`📸 REGISTRO FOTOGRÁFICO\n\nVT ${vtVal}\n${eqVal}\nQRU: ${qruVal}\nQTH: ${qthVal}`;
-  
-  // Tenta usar API nativa de compartilhamento (funciona em Android/iOS modernos)
   if(navigator.share){
     const fotoFile=new File([fotoBlob],'registro.jpg',{type:'image/jpeg'});
-    navigator.share({
-      title:'Registro Operacional',
-      text:msg,
-      files:[fotoFile]
-    }).then(()=>{
-      resetarFoto();
-      voltar('fotoView');
-    }).catch(err=>{
-      // Fallback se usuário cancelar
-      console.log('Compartilhamento cancelado');
-    });
+    navigator.share({title:'Registro Operacional',text:msg,files:[fotoFile]})
+    .then(()=>{resetarFoto();voltar('fotoView');})
+    .catch(err=>console.log('Compartilhamento cancelado'));
   }else{
-    // Navegadores que não suportam navigator.share
     alert('Foto capturada!\n\nPara enviar:\n1. Abra o WhatsApp\n2. Cole a mensagem\n3. Anexe a foto manualmente');
     navigator.clipboard.writeText(msg);
     resetarFoto();
@@ -500,18 +722,170 @@ function solicitarApoio(){
   const condutor=document.getElementById('apoioCondutor').value;
   const qthVal=document.getElementById('apoioQth').value;
   const obs=document.getElementById('apoioObs').value.trim();
-  
   let msg=`Viatura equipe: ${condutor} VT: ${vtVal} solicita apoio em QTH: ${qthVal}`;
-  
-  if(obs){
-    msg+=`\nObservação: ${obs}`;
-  }
-  
+  if(obs) msg+=`\nObservação: ${obs}`;
   const encoded=encodeURIComponent(msg);
   window.location.href=`whatsapp://send?text=${encoded}`;
-  
-  // Limpa observação após enviar
   document.getElementById('apoioObs').value='';
+}
+
+/* === RATT (REVEZAMENTO) === */
+let rattState={
+  tempoCiclo:30,
+  modo:2,
+  equipe:[],
+  cicloAtual:0,
+  grupos:[],
+  iniciado:false,
+  pausado:false,
+  tempoRestante:0,
+  intervalId:null,
+  clockId:null,
+  historico:[]
+};
+
+function setTempoCiclo(minutos){
+  rattState.tempoCiclo=minutos;
+  document.querySelectorAll('.ratt-toggle-group .ratt-toggle-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',[20,30,60][i]===minutos);
+  });
+}
+
+function setModo(operadores){
+  rattState.modo=operadores;
+  document.querySelectorAll('.ratt-toggle-group:nth-of-type(2) .ratt-toggle-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',[1,2,3][i]===operadores);
+  });
+}
+
+function iniciarRATT(){
+  const inicio=document.getElementById('rattInicio').value;
+  const fim=document.getElementById('rattFim').value;
+  const equipeTexto=document.getElementById('rattEquipe').value.trim();
+  
+  if(!inicio||!fim){alert('Defina início e fim do turno');return;}
+  if(!equipeTexto){alert('Informe a equipe');return;}
+  
+  rattState.equipe=equipeTexto.split(',').map(n=>n.trim().toUpperCase()).filter(n=>n);
+  if(rattState.equipe.length<rattState.modo){
+    alert(`É necessário ter pelo menos ${rattState.modo} operadores`);
+    return;
+  }
+  
+  rattState.grupos=gerarGrupos(rattState.equipe,rattState.modo);
+  rattState.cicloAtual=0;
+  rattState.tempoRestante=rattState.tempoCiclo*60;
+  rattState.iniciado=true;
+  rattState.pausado=false;
+  
+  document.getElementById('rattConfig').style.display='none';
+  document.getElementById('rattDisplay').style.display='block';
+  
+  atualizarDisplayRATT();
+  iniciarTimers();
+}
+
+function gerarGrupos(equipe,tamanho){
+  const grupos=[];
+  const total=equipe.length;
+  let offset=0;
+  
+  for(let ciclo=0;ciclo<Math.ceil(total/tamanho)*2;ciclo++){
+    const grupo=[];
+    for(let i=0;i<tamanho;i++){
+      grupo.push(equipe[(offset+i)%total]);
+    }
+    grupos.push(grupo);
+    offset+=tamanho;
+  }
+  return grupos;
+}
+
+function atualizarDisplayRATT(){
+  const grupoAtual=rattState.grupos[rattState.cicloAtual%rattState.grupos.length];
+  const grupoProximo=rattState.grupos[(rattState.cicloAtual+1)%rattState.grupos.length];
+  const descansando=rattState.equipe.filter(op=>!grupoAtual.includes(op));
+  
+  document.getElementById('rattAtivos').textContent=grupoAtual.join(', ');
+  document.getElementById('rattDescansando').textContent=descansando.join(', ')||'--';
+  document.getElementById('rattProximos').textContent=grupoProximo.join(', ');
+  
+  atualizarTimer();
+}
+
+function iniciarTimers(){
+  if(rattState.clockId) clearInterval(rattState.clockId);
+  if(rattState.intervalId) clearInterval(rattState.intervalId);
+  
+  rattState.clockId=setInterval(()=>{
+    const agora=new Date();
+    document.getElementById('rattClock').textContent=agora.toLocaleTimeString('pt-BR');
+  },1000);
+  
+  rattState.intervalId=setInterval(()=>{
+    if(!rattState.pausado && rattState.tempoRestante>0){
+      rattState.tempoRestante--;
+      atualizarTimer();
+      if(rattState.tempoRestante===0){
+        alertaRevezamento();
+      }
+    }
+  },1000);
+}
+
+function atualizarTimer(){
+  const h=Math.floor(rattState.tempoRestante/3600);
+  const m=Math.floor((rattState.tempoRestante%3600)/60);
+  const s=rattState.tempoRestante%60;
+  document.getElementById('rattTimer').textContent=
+    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function alertaRevezamento(){
+  try{navigator.vibrate?.(500);}catch(e){}
+  if(confirm('Tempo esgotado! Revezar agora?')){
+    revezarRATT();
+  }
+}
+
+function revezarRATT(){
+  rattState.cicloAtual++;
+  rattState.tempoRestante=rattState.tempoCiclo*60;
+  rattState.historico.push({
+    ciclo:rattState.cicloAtual-1,
+    grupo:rattState.grupos[(rattState.cicloAtual-1)%rattState.grupos.length],
+    hora:new Date().toLocaleTimeString('pt-BR')
+  });
+  atualizarDisplayRATT();
+  try{navigator.vibrate?.(100);}catch(e){}
+}
+
+function pausarRATT(){
+  rattState.pausado=!rattState.pausado;
+  const btn=event.target;
+  btn.textContent=rattState.pausado?'Retomar':'Pausar';
+}
+
+function encerrarRATT(){
+  if(confirm('Encerrar revezamento?')){
+    clearInterval(rattState.intervalId);
+    clearInterval(rattState.clockId);
+    rattState.iniciado=false;
+    document.getElementById('rattConfig').style.display='block';
+    document.getElementById('rattDisplay').style.display='none';
+    salvarHistoricoRATT();
+  }
+}
+
+function salvarHistoricoRATT(){
+  const data=new Date().toISOString().split('T')[0];
+  const hist=JSON.parse(localStorage.getItem('ratt_historico')||'[]');
+  hist.push({
+    data:data,
+    turno:`${document.getElementById('rattInicio').value}-${document.getElementById('rattFim').value}`,
+    ciclos:rattState.historico
+  });
+  localStorage.setItem('ratt_historico',JSON.stringify(hist.slice(-7)));
 }
 
 </script>
