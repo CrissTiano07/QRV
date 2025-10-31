@@ -509,7 +509,7 @@ textarea{
   <header>
     <button onclick="voltar('qrvView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
     <h1>QRV Operacional</h1>
-    <div style="width:32px;"></div>
+    <button onclick="limparQRV()" class="theme-toggle" title="Limpar dados"><i data-lucide="trash-2"></i></button>
   </header>
 
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:85%;">
@@ -719,6 +719,11 @@ function abrir(id){
   const menu=document.getElementById('menuView');
   const tela=document.getElementById(id);
   
+  // Carrega dados salvos do QRV ao abrir
+  if(id==='qrvView'){
+    carregarQRV();
+  }
+  
   if(id==='fotoView' || id==='apoioView'){
     const vtVal=vt.value.trim();
     const eqVal=equipe.value.trim();
@@ -790,9 +795,54 @@ const qru=document.getElementById('qru');
 const qth=document.getElementById('qth');
 [vt,qth].forEach(f=>f.addEventListener('focus',()=>f.select()));
 [equipe,qru,qth,vt].forEach(f=>f.addEventListener('input',()=>f.value=f.value.toUpperCase()));
+
+function carregarQRV(){
+  try{
+    const dados=JSON.parse(localStorage.getItem('qrv_ultimo')||'null');
+    if(dados){
+      vt.value=dados.vt||'';
+      equipe.value=dados.equipe||'';
+      qru.value=dados.qru||'';
+      qth.value=dados.qth||'';
+    }
+  }catch(e){
+    console.error('Erro ao carregar QRV:',e);
+  }
+}
+
+function salvarQRV(){
+  const dados={
+    vt:vt.value.trim(),
+    equipe:equipe.value.trim(),
+    qru:qru.value.trim(),
+    qth:qth.value.trim(),
+    timestamp:new Date().toISOString()
+  };
+  localStorage.setItem('qrv_ultimo',JSON.stringify(dados));
+}
+
+function limparQRV(){
+  if(confirm('🗑️ Limpar todos os dados do QRV?')){
+    vt.value='';
+    equipe.value='';
+    qru.value='';
+    qth.value='';
+    localStorage.removeItem('qrv_ultimo');
+    try{navigator.vibrate?.(50);}catch(e){}
+    vt.focus();
+  }
+}
+
 function enviarQRV(){
   const vtVal=vt.value.trim(), eq=equipe.value.trim(), qruVal=qru.value.trim(), qthVal=qth.value.trim();
-  if(!vtVal||!eq||!qruVal||!qthVal){alert('Preencha todos os campos');return;}
+  if(!vtVal||!eq||!qruVal||!qthVal){
+    alert('❌ Preencha todos os campos');
+    return;
+  }
+  
+  // Salva dados antes de enviar
+  salvarQRV();
+  
   const texto=`VT ${vtVal}\n${eq} (CONDUTOR)\nQRU: ${qruVal}\nQTH: ${qthVal}`;
   const encoded=encodeURIComponent(texto);
   window.location.href=`whatsapp://send?text=${encoded}`;
