@@ -1150,6 +1150,123 @@ function salvarHistoricoRATT(){
   rattState.historico = [];
 }
 
+/* === QTA (Encerrar Ciclo QRV) === */
+
+// adiciona o botão QTA no formulário QRV após carregamento
+document.addEventListener('DOMContentLoaded', () => {
+  const qrvForm = document.getElementById('qrvForm');
+  if (!document.getElementById('qtaBtn')) {
+    const qtaBtn = document.createElement('button');
+    qtaBtn.id = 'qtaBtn';
+    qtaBtn.type = 'button';
+    qtaBtn.className = 'primary-btn';
+    qtaBtn.style.background = 'linear-gradient(145deg, #dc2626, #b91c1c)';
+    qtaBtn.style.marginTop = '10px';
+    qtaBtn.textContent = 'Encerrar Ciclo (QTA)';
+    qtaBtn.onclick = encerrarQTA;
+    qrvForm.querySelector('.send-area').appendChild(qtaBtn);
+  }
+});
+
+// estado de bloqueio do QRV
+let qrvBloqueado = false;
+
+// função de encerramento de ciclo
+function encerrarQTA() {
+  if (qrvBloqueado) {
+    alert('⚠️ O ciclo já está encerrado.\nAguarde uma nova QRU para iniciar um novo QRV.');
+    return;
+  }
+
+  const confirmar = confirm('🛑 Confirmar encerramento do ciclo (QTA)?');
+  if (!confirmar) return;
+
+  const dados = {
+    vt: vt.value.trim(),
+    equipe: equipe.value.trim(),
+    qru: qru.value.trim(),
+    qth: qth.value.trim(),
+    encerradoEm: new Date().toLocaleString('pt-BR'),
+  };
+
+  // valida dados mínimos
+  if (!dados.vt || !dados.equipe) {
+    alert('❌ Complete os campos de VT e Equipe antes de encerrar.');
+    return;
+  }
+
+  // salva registro local do QTA
+  const historico = JSON.parse(localStorage.getItem('qta_historico') || '[]');
+  historico.push(dados);
+  localStorage.setItem('qta_historico', JSON.stringify(historico.slice(-10))); // mantém últimos 10
+
+  // bloqueia QRV até nova QRU
+  qrvBloqueado = true;
+  localStorage.setItem('qrv_bloqueado', 'true');
+
+  // limpa QRU (aguardando nova missão)
+  qru.value = '';
+  salvarQRV();
+
+  alert(`✅ Ciclo encerrado (QTA registrado).\n\nVT ${dados.vt}\nEquipe: ${dados.equipe}\nQTH: ${dados.qth}`);
+
+  // notifica RATT se ativo
+  try {
+    espelharQTAnoRATT(dados);
+  } catch (e) {
+    console.warn('RATT não ativo para espelhar QTA.');
+  }
+
+  try { navigator.vibrate?.([80, 40, 80]); } catch(e){}
+}
+
+// desbloqueia QRV quando uma nova QRU é informada
+qru.addEventListener('input', () => {
+  if (qru.value.trim() && qrvBloqueado) {
+    qrvBloqueado = false;
+    localStorage.removeItem('qrv_bloqueado');
+    console.log('🔓 Novo ciclo QRV liberado.');
+  }
+});
+
+// impede envio se estiver bloqueado
+const oldEnviarQRV = enviarQRV;
+enviarQRV = function () {
+  if (localStorage.getItem('qrv_bloqueado') === 'true') {
+    alert('⚠️ O ciclo anterior ainda está encerrado (QTA ativo).\nInforme uma nova QRU para iniciar.');
+    return;
+  }
+  oldEnviarQRV();
+};
+
+// sincroniza status ao abrir o QRV
+function carregarEstadoQTA() {
+  qrvBloqueado = localStorage.getItem('qrv_bloqueado') === 'true';
+  if (qrvBloqueado) {
+    console.log('🔒 QRV bloqueado até nova QRU.');
+  }
+}
+carregarEstadoQTA();
+
+/* === ESPELHAR QTA NO REVEZAMENTO (RATT) === */
+function espelharQTAnoRATT(dadosQTA) {
+  // se o RATT estiver ativo
+  if (rattState && rattState.iniciado) {
+    const msg = `🟣 QTA recebido — Ciclo encerrado\nVT ${dadosQTA.vt}\n${dadosQTA.equipe}\nQTH: ${dadosQTA.qth}\n${dadosQTA.encerradoEm}`;
+    console.log(msg);
+
+    // insere registro no histórico do RATT atual
+    rattState.historico.push({
+      ciclo: rattState.cicloAtual,
+      tipo: 'QTA',
+      dados: dadosQTA,
+    });
+
+    // opcional: alerta visual leve
+    alert('📡 RATT notificado: QTA recebido.');
+  }
+}
+
 </script>
 </body>
 </html>
