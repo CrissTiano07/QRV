@@ -48,7 +48,9 @@ html,body{
 
 /* CABEÇALHO */
 header{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   padding:10px 16px;
 }
 h1{
@@ -62,6 +64,7 @@ h1{
 .theme-toggle{
   background:none;border:none;color:var(--texto);
   width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
 }
 .theme-toggle svg{width:22px;height:22px;}
 
@@ -83,6 +86,7 @@ h1{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   font-size:15px;font-weight:700;color:var(--texto);
   transition:all .15s ease-in-out;
+  cursor:pointer;
 }
 .btn:active{
   box-shadow:inset 8px 8px 16px var(--sombra),
@@ -109,6 +113,7 @@ h1{
   transition:all .15s ease-in-out;
   box-shadow:8px 8px 16px var(--sombra), -8px -8px 16px var(--luz);
   background:var(--fundo);
+  cursor:pointer;
 }
 .bottom-btn svg{width:20px;height:20px;}
 .bottom-btn:active{
@@ -205,6 +210,7 @@ textarea{
              -6px -6px 12px #fff,
              inset 0 1px 2px rgba(255,255,255,0.3);
   transition:all .12s ease-in-out;
+  cursor:pointer;
 }
 .primary-btn:active{
   box-shadow:inset 6px 6px 12px #c5cad3, 
@@ -212,11 +218,17 @@ textarea{
   transform:scale(.98);
 }
 
-/* RATT - REVEZAMENTO APRIMORADO */
+/* RATT - REVEZAMENTO */
 .ratt-config{
   display:grid;
   gap:12px;
   margin-bottom:20px;
+}
+
+.ratt-horarios-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
 .ratt-toggle-group{
@@ -237,6 +249,7 @@ textarea{
   font-size:14px;
   color:var(--texto);
   transition:all .2s;
+  cursor:pointer;
 }
 
 .ratt-toggle-btn.active{
@@ -394,8 +407,10 @@ textarea{
 
 .ratt-controls{
   display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap:10px;
-  margin-top:20px;
+  margin-top:24px;
 }
 
 .ratt-btn{
@@ -408,6 +423,7 @@ textarea{
   box-shadow:6px 6px 12px var(--sombra), 
              -6px -6px 12px var(--luz);
   transition:all .15s;
+  cursor:pointer;
 }
 
 .ratt-btn:active{
@@ -425,6 +441,59 @@ textarea{
   background:var(--fundo);
   color:var(--texto);
 }
+
+/* Botão circular principal (revezar) */
+.ratt-btn-main{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  border:none;
+  background:linear-gradient(145deg, #a855f7, #9333ea);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:6px 6px 12px var(--sombra), -6px -6px 12px var(--luz);
+  transition:all .15s ease-in-out;
+  cursor:pointer;
+}
+.ratt-btn-main:active{
+  transform:scale(.94);
+  box-shadow:inset 6px 6px 12px var(--sombra),
+              inset -6px -6px 12px var(--luz);
+}
+.ratt-btn-main svg{
+  width:30px;
+  height:30px;
+  stroke:#fff;
+}
+
+/* Botões redondos auxiliares */
+.ratt-btn-circle{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  border:none;
+  background:var(--fundo);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:6px 6px 12px var(--sombra), -6px -6px 12px var(--luz);
+  transition:all .2s;
+  cursor:pointer;
+}
+.ratt-btn-circle:active{
+  box-shadow:inset 6px 6px 12px var(--sombra),
+              inset -6px -6px 12px var(--luz);
+  transform:scale(.94);
+}
+.ratt-btn-circle svg{
+  width:26px;
+  height:26px;
+}
+.ratt-btn-circle.green svg{stroke:var(--verde);}
+.ratt-btn-circle.red svg{stroke:var(--vermelho);}
+.ratt-btn-circle.config svg{stroke:var(--laranja);}
 
 /* MODO ESCURO */
 .dark{
@@ -480,85 +549,9 @@ textarea{
   box-shadow:8px 8px 16px var(--sombra), 
              -8px -8px 16px var(--luz);
 }
-
-
-.ratt-btn-add:active {
-  box-shadow: inset 8px 8px 16px var(--sombra),
-              inset -8px -8px 16px var(--luz);
-  transform: scale(.95);
+.dark .ratt-btn-circle{
+  box-shadow:6px 6px 12px var(--sombra), -6px -6px 12px var(--luz);
 }
-.ratt-btn-add svg {
-  width: 28px;
-  height: 28px;
-  stroke: var(--roxo);
-}
-.dark .ratt-btn-add {
-  box-shadow: 8px 8px 16px var(--sombra),
-              -8px -8px 16px var(--luz);
-}
-
-/* === NOVA ÁREA DE CONTROLES RATT === */
-.ratt-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 24px;
-  position: relative;
-}
-
-.ratt-btn-main {
-  width: 78px;
-  height: 78px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(145deg, #a855f7, #9333ea);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 6px 6px 12px var(--sombra), -6px -6px 12px var(--luz);
-  transition: all .15s ease-in-out;
-}
-.ratt-btn-main:active {
-  transform: scale(.94);
-  box-shadow: inset 6px 6px 12px var(--sombra),
-              inset -6px -6px 12px var(--luz);
-}
-.ratt-btn-main svg {
-  width: 30px;
-  height: 30px;
-  stroke: #fff;
-}
-
-/* Botões redondos auxiliares (adicionar/excluir) */
-.ratt-btn-circle {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  border: none;
-  background: var(--fundo);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 6px 6px 12px var(--sombra), -6px -6px 12px var(--luz);
-  transition: all .2s;
-}
-.ratt-btn-circle:active {
-  box-shadow: inset 6px 6px 12px var(--sombra),
-              inset -6px -6px 12px var(--luz);
-  transform: scale(.94);
-}
-.ratt-btn-circle svg {
-  width: 26px;
-  height: 26px;
-}
-.ratt-btn-circle.green svg { stroke: var(--verde); }
-.ratt-btn-circle.red svg { stroke: var(--vermelho); }
-.dark .ratt-btn-circle {
-  box-shadow: 6px 6px 12px var(--sombra), -6px -6px 12px var(--luz);
-}
-
 </style>
 </head>
 <body>
@@ -587,7 +580,7 @@ textarea{
 <div id="qrvView" class="view hidden-right">
   <header>
     <button onclick="voltar('qrvView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
-    <h1>QRV Operacional</h1>
+    <h1>QRV</h1>
     <button onclick="limparQRV()" class="theme-toggle" title="Limpar dados"><i data-lucide="trash-2"></i></button>
   </header>
 
@@ -626,7 +619,7 @@ textarea{
 <div id="fotoView" class="view view-scrollable hidden-right">
   <header>
     <button onclick="voltar('fotoView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
-    <h1>Registro Fotográfico</h1>
+    <h1>Foto</h1>
     <div style="width:32px;"></div>
   </header>
 
@@ -666,7 +659,7 @@ textarea{
 <div id="apoioView" class="view hidden-right">
   <header>
     <button onclick="voltar('apoioView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
-    <h1>Apoio Operacional</h1>
+    <h1>Apoio</h1>
     <div style="width:32px;"></div>
   </header>
 
@@ -695,7 +688,7 @@ textarea{
 <div id="rattView" class="view view-scrollable hidden-right">
   <header>
     <button onclick="voltar('rattView')" class="theme-toggle"><i data-lucide="arrow-left"></i></button>
-    <h1>Revezamento</h1>
+    <div style="flex:1;"></div>
     <div style="width:32px;"></div>
   </header>
 
@@ -705,14 +698,15 @@ textarea{
     <div id="rattConfig" class="card">
       <div class="ratt-config">
         
-        <div>
-          <label>Início do Turno</label>
-          <input type="time" id="rattInicio" value="07:00">
-        </div>
-
-        <div>
-          <label>Fim do Turno</label>
-          <input type="time" id="rattFim" value="13:00">
+        <div class="ratt-horarios-grid">
+          <div>
+            <label>Início</label>
+            <input type="time" id="rattInicio" value="05:30">
+          </div>
+          <div>
+            <label>Fim</label>
+            <input type="time" id="rattFim" value="11:30">
+          </div>
         </div>
 
         <div>
@@ -751,9 +745,9 @@ textarea{
       <!-- PROGRESSO DO TURNO -->
       <div class="turno-progress">
         <div class="turno-times">
-          <span id="turnoInicio">07:00</span>
+          <span id="turnoInicio">05:30</span>
           <span id="turnoAtual">--:--</span>
-          <span id="turnoFim">13:00</span>
+          <span id="turnoFim">11:30</span>
         </div>
         <div class="progress-bar">
           <div class="progress-fill" id="turnoProgressBar" style="width:0%;"></div>
@@ -776,24 +770,20 @@ textarea{
       <!-- OPERADORES -->
       <div class="operators-grid" id="operatorsGrid"></div>
 
+      <!-- CONTROLES -->
       <div class="ratt-controls">
-  <button id="pausarRattBtn" class="ratt-btn ratt-btn-secondary">Pausar</button>
+        <button id="pausarRattBtn" type="button" class="ratt-btn ratt-btn-secondary" onclick="pausarRATT()">Pausar</button>
 
-  <button id="revezarBtn" class="ratt-btn-main" onclick="revezarRATT()">
-    <i data-lucide="refresh-ccw"></i>
-  </button>
+        <button id="revezarBtn" type="button" class="ratt-btn-main" onclick="revezarRATT()">
+          <i data-lucide="refresh-ccw"></i>
+        </button>
 
-  <button id="addBtn" class="ratt-btn-circle green" onclick="adicionarOperadorDuranteRATT()">
-    <i data-lucide="user-plus"></i>
-  </button>
+        <button id="configRattBtn" type="button" class="ratt-btn-circle config" onclick="abrirConfigRATT()">
+          <i data-lucide="settings"></i>
+        </button>
 
-  <button id="removeBtn" class="ratt-btn-circle red" onclick="removerOperadorDuranteRATT()">
-    <i data-lucide="user-minus"></i>
-  </button>
-
-  <button class="ratt-btn ratt-btn-secondary" onclick="encerrarRATT()">Encerrar</button>
-</div>
-
+        <button type="button" class="ratt-btn ratt-btn-secondary" onclick="encerrarRATT()">Encerrar</button>
+      </div>
 
     </div>
 
@@ -803,228 +793,177 @@ textarea{
 <script>
 lucide.createIcons();
 
-/* === NAVEGAÇÃO E INTEGRAÇÃO === */
-const abrirOriginal = function(id) {
-  const menu = document.getElementById('menuView');
-  const tela = document.getElementById(id);
-
-  if (id === 'qrvView') {
+/* === NAVEGAÇÃO === */
+function abrir(id){
+  const menu=document.getElementById('menuView');
+  const tela=document.getElementById(id);
+  
+  if(id==='qrvView'){
     carregarQRV();
-    carregarEstadoQTA();
   }
-
-  if (id === 'rattView') {
+  
+  if(id==='rattView'){
     preencherRATTcomQRV();
   }
-
-  if (id === 'fotoView' || id === 'apoioView') {
-    const vtVal = document.getElementById('vt').value.trim();
-    const eqVal = document.getElementById('equipe').value.trim();
-    const qruVal = document.getElementById('qru').value.trim();
-    const qthVal = document.getElementById('qth').value.trim();
-
-    if (!vtVal || !eqVal || !qruVal || !qthVal) {
+  
+  if(id==='fotoView' || id==='apoioView'){
+    const vtVal=vt.value.trim();
+    const eqVal=equipe.value.trim();
+    const qruVal=qru.value.trim();
+    const qthVal=qth.value.trim();
+    
+    if(!vtVal||!eqVal||!qruVal||!qthVal){
       alert('Preencha o QRV primeiro');
       return;
     }
-
-    const condutor = eqVal.split(',')[0].trim();
-    if (id === 'fotoView') {
-      document.getElementById('fotoVt').value = vtVal;
-      document.getElementById('fotoEquipe').value = eqVal;
-      document.getElementById('fotoQru').value = qruVal;
-      document.getElementById('fotoQth').value = qthVal;
-    } else if (id === 'apoioView') {
-      document.getElementById('apoioVt').value = vtVal;
-      document.getElementById('apoioCondutor').value = condutor;
-      document.getElementById('apoioQth').value = qthVal;
-      document.getElementById('apoioObs').value = '';
+    
+    const condutor=eqVal.split(',')[0].trim();
+    
+    if(id==='fotoView'){
+      document.getElementById('fotoVt').value=vtVal;
+      document.getElementById('fotoEquipe').value=eqVal;
+      document.getElementById('fotoQru').value=qruVal;
+      document.getElementById('fotoQth').value=qthVal;
+    }else if(id==='apoioView'){
+      document.getElementById('apoioVt').value=vtVal;
+      document.getElementById('apoioCondutor').value=condutor;
+      document.getElementById('apoioQth').value=qthVal;
+      document.getElementById('apoioObs').value='';
     }
   }
+  
+  menu.classList.remove('active');menu.classList.add('hidden-left');
+  tela.classList.remove('hidden-right');tela.classList.add('active');
+  try{navigator.vibrate?.(40);}catch(e){}
+}
 
-  menu.classList.remove('active');
-  menu.classList.add('hidden-left');
-  tela.classList.remove('hidden-right');
-  tela.classList.add('active');
-  try { navigator.vibrate?.(40); } catch (e) {}
-};
-var abrir = abrirOriginal; // Garante que a variável global 'abrir' seja a nossa função
-
-function voltar(id) {
-  const menu = document.getElementById('menuView');
-  const tela = document.getElementById(id);
-  tela.classList.remove('active');
-  tela.classList.add('hidden-right');
-  menu.classList.remove('hidden-left');
-  menu.classList.add('active');
-  try { navigator.vibrate?.(30); } catch (e) {}
+function voltar(id){
+  const menu=document.getElementById('menuView');
+  const tela=document.getElementById(id);
+  tela.classList.remove('active');tela.classList.add('hidden-right');
+  menu.classList.remove('hidden-left');menu.classList.add('active');
+  try{navigator.vibrate?.(30);}catch(e){}
 }
 
 /* === TEMA === */
-const toggle = document.getElementById('themeToggle');
-let dark = localStorage.getItem('theme') === 'dark';
-if (dark) document.body.classList.add('dark');
-toggle.addEventListener('click', () => {
+const toggle=document.getElementById('themeToggle');
+let dark=localStorage.getItem('theme')==='dark';
+if(dark) document.body.classList.add('dark');
+toggle.addEventListener('click',()=>{
   document.body.classList.toggle('dark');
-  dark = document.body.classList.contains('dark');
-  localStorage.setItem('theme', dark ? 'dark' : 'light');
-  toggle.innerHTML = dark ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
+  dark=document.body.classList.contains('dark');
+  localStorage.setItem('theme',dark?'dark':'light');
+  toggle.innerHTML=dark?'<i data-lucide="sun"></i>':'<i data-lucide="moon"></i>';
   lucide.createIcons();
 });
 
-/* === EMERGÊNCIA E CENTRAL === */
-const emergenciaBtn = document.getElementById('emergenciaBtn');
+/* === EMERGÊNCIA === */
+const emergenciaBtn=document.getElementById('emergenciaBtn');
 let longPress;
-emergenciaBtn.addEventListener('touchstart', () => {
-  emergenciaBtn.style.transform = 'scale(0.95)';
-  longPress = setTimeout(() => window.location.href = 'tel:190', 1200);
+emergenciaBtn.addEventListener('touchstart',()=>{
+  emergenciaBtn.style.transform='scale(0.95)';
+  longPress=setTimeout(()=>window.location.href='tel:190',1200);
 });
-emergenciaBtn.addEventListener('touchend', () => {
+emergenciaBtn.addEventListener('touchend',()=>{
   clearTimeout(longPress);
-  emergenciaBtn.style.transform = 'scale(1)';
+  emergenciaBtn.style.transform='scale(1)';
 });
-function ligarCentral() { window.location.href = 'tel:+5585XXXXXXXX'; }
+function ligarCentral(){window.location.href='tel:+5585XXXXXXXX';}
 
-/* === FORMULÁRIO QRV E QTA === */
-const vt = document.getElementById('vt');
-const equipe = document.getElementById('equipe');
-const qru = document.getElementById('qru');
-const qth = document.getElementById('qth');
-[vt, qth].forEach(f => f.addEventListener('focus', () => f.select()));
-[equipe, qru, qth, vt].forEach(f => f.addEventListener('input', () => f.value = f.value.toUpperCase()));
+/* === FORMULÁRIO QRV === */
+const vt=document.getElementById('vt');
+const equipe=document.getElementById('equipe');
+const qru=document.getElementById('qru');
+const qth=document.getElementById('qth');
+[vt,qth].forEach(f=>f.addEventListener('focus',()=>f.select()));
+[equipe,qru,qth,vt].forEach(f=>f.addEventListener('input',()=>f.value=f.value.toUpperCase()));
 
-let qrvBloqueado = false;
-
-function carregarQRV() {
-  try {
-    const dados = JSON.parse(localStorage.getItem('qrv_ultimo') || 'null');
-    if (dados) {
-      vt.value = dados.vt || '';
-      equipe.value = dados.equipe || '';
-      qru.value = dados.qru || '';
-      qth.value = dados.qth || '';
+function carregarQRV(){
+  try{
+    const dados=JSON.parse(localStorage.getItem('qrv_ultimo')||'null');
+    if(dados){
+      vt.value=dados.vt||'';
+      equipe.value=dados.equipe||'';
+      qru.value=dados.qru||'';
+      qth.value=dados.qth||'';
     }
-  } catch (e) { console.error('Erro ao carregar QRV:', e); }
+  }catch(e){
+    console.error('Erro ao carregar QRV:',e);
+  }
 }
 
-function salvarQRV() {
-  const dados = {
-    vt: vt.value.trim(),
-    equipe: equipe.value.trim(),
-    qru: qru.value.trim(),
-    qth: qth.value.trim(),
-    timestamp: new Date().toISOString()
+function salvarQRV(){
+  const dados={
+    vt:vt.value.trim(),
+    equipe:equipe.value.trim(),
+    qru:qru.value.trim(),
+    qth:qth.value.trim(),
+    timestamp:new Date().toISOString()
   };
-  localStorage.setItem('qrv_ultimo', JSON.stringify(dados));
+  localStorage.setItem('qrv_ultimo',JSON.stringify(dados));
 }
 
-function limparQRV() {
-  if (confirm('🗑️ Limpar todos os dados do QRV?')) {
-    vt.value = ''; equipe.value = ''; qru.value = ''; qth.value = '';
+function limparQRV(){
+  if(confirm('🗑️ Limpar todos os dados do QRV?')){
+    vt.value='';
+    equipe.value='';
+    qru.value='';
+    qth.value='';
     localStorage.removeItem('qrv_ultimo');
-    qrvBloqueado = false;
-    localStorage.removeItem('qrv_bloqueado');
-    try { navigator.vibrate?.(50); } catch (e) {}
+    try{navigator.vibrate?.(50);}catch(e){}
     vt.focus();
   }
 }
 
-var enviarQRV = function() {
-  if (qrvBloqueado) {
-    alert('⚠️ Ciclo encerrado (QTA ativo).\nInforme uma nova QRU para iniciar novo QRV.');
-    return;
-  }
-  const vtVal = vt.value.trim(), eq = equipe.value.trim(), qruVal = qru.value.trim(), qthVal = qth.value.trim();
-  if (!vtVal || !eq || !qruVal || !qthVal) {
+function enviarQRV(){
+  const vtVal=vt.value.trim(), eq=equipe.value.trim(), qruVal=qru.value.trim(), qthVal=qth.value.trim();
+  if(!vtVal||!eq||!qruVal||!qthVal){
     alert('❌ Preencha todos os campos');
     return;
   }
-  salvarQRV();
-  const texto = `VT ${vtVal}\n${eq} (CONDUTOR)\nQRU: ${qruVal}\nQTH: ${qthVal}`;
-  const encoded = encodeURIComponent(texto);
-  window.location.href = `whatsapp://send?text=${encoded}`;
-};
-
-function encerrarQTA() {
-  if (qrvBloqueado) {
-    alert('⚠️ O ciclo já está encerrado.');
-    return;
-  }
-  if (!confirm('🛑 Confirmar encerramento do ciclo (QTA)?')) return;
-
-  const dados = {
-    vt: vt.value.trim(), equipe: equipe.value.trim(), qru: qru.value.trim(), qth: qth.value.trim(),
-    encerradoEm: new Date().toLocaleString('pt-BR'),
-  };
-  if (!dados.vt || !dados.equipe) {
-    alert('❌ Preencha VT e Equipe antes de encerrar.');
-    return;
-  }
-
-  const historico = JSON.parse(localStorage.getItem('qta_historico') || '[]');
-  historico.push(dados);
-  localStorage.setItem('qta_historico', JSON.stringify(historico.slice(-10)));
-
-  qru.value = ''; qth.value = '';
-  salvarQRV();
-
-  qrvBloqueado = true;
-  localStorage.setItem('qrv_bloqueado', 'true');
-  alert(`✅ Ciclo encerrado (QTA registrado).\n\nVT ${dados.vt}\nEquipe: ${dados.equipe}`);
   
-  // INTEGRAÇÃO: Chama a função para encerrar o RATT
-  espelharQTAnoRATT(dados);
-
-  try { navigator.vibrate?.([80, 40, 80]); } catch (e) {}
+  salvarQRV();
+  
+  const texto=`VT ${vtVal}\n${eq} (CONDUTOR)\nQRU: ${qruVal}\nQTH: ${qthVal}`;
+  const encoded=encodeURIComponent(texto);
+  window.location.href=`whatsapp://send?text=${encoded}`;
 }
-
-qru.addEventListener('input', () => {
-  if (qru.value.trim() && qrvBloqueado) {
-    qrvBloqueado = false;
-    localStorage.removeItem('qrv_bloqueado');
-    console.log('🔓 Novo ciclo QRV liberado.');
-  }
-});
-
-function carregarEstadoQTA() {
-  qrvBloqueado = localStorage.getItem('qrv_bloqueado') === 'true';
-  if (qrvBloqueado) console.log('🔒 QRV bloqueado até nova QRU.');
-}
-carregarEstadoQTA();
 
 /* === FOTO === */
-let fotoBlob = null;
-function tirarFoto() { document.getElementById('inputFoto').click(); }
-document.getElementById('inputFoto').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  fotoBlob = file;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    document.getElementById('previewFoto').src = ev.target.result;
-    document.getElementById('previewContainer').style.display = 'block';
+let fotoBlob=null;
+function tirarFoto(){document.getElementById('inputFoto').click();}
+document.getElementById('inputFoto').addEventListener('change',(e)=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  fotoBlob=file;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
+    document.getElementById('previewFoto').src=ev.target.result;
+    document.getElementById('previewContainer').style.display='block';
   };
   reader.readAsDataURL(file);
 });
-function resetarFoto() {
-  fotoBlob = null;
-  document.getElementById('inputFoto').value = '';
-  document.getElementById('previewFoto').src = '';
-  document.getElementById('previewContainer').style.display = 'none';
+
+function resetarFoto(){
+  fotoBlob=null;
+  document.getElementById('inputFoto').value='';
+  document.getElementById('previewFoto').src='';
+  document.getElementById('previewContainer').style.display='none';
 }
-function enviarFoto() {
-  if (!fotoBlob) { alert('Tire uma foto primeiro'); return; }
-  const vtVal = document.getElementById('fotoVt').value;
-  const eqVal = document.getElementById('fotoEquipe').value;
-  const qruVal = document.getElementById('fotoQru').value;
-  const qthVal = document.getElementById('fotoQth').value;
-  const msg = `📸 REGISTRO FOTOGRÁFICO\n\nVT ${vtVal}\n${eqVal}\nQRU: ${qruVal}\nQTH: ${qthVal}`;
-  if (navigator.share) {
-    const fotoFile = new File([fotoBlob], 'registro.jpg', { type: 'image/jpeg' });
-    navigator.share({ title: 'Registro Operacional', text: msg, files: [fotoFile] })
-      .then(() => { resetarFoto(); voltar('fotoView'); })
-      .catch(err => console.log('Compartilhamento cancelado'));
-  } else {
+
+function enviarFoto(){
+  if(!fotoBlob){alert('Tire uma foto primeiro');return;}
+  const vtVal=document.getElementById('fotoVt').value;
+  const eqVal=document.getElementById('fotoEquipe').value;
+  const qruVal=document.getElementById('fotoQru').value;
+  const qthVal=document.getElementById('fotoQth').value;
+  const msg=`📸 REGISTRO FOTOGRÁFICO\n\nVT ${vtVal}\n${eqVal}\nQRU: ${qruVal}\nQTH: ${qthVal}`;
+  if(navigator.share){
+    const fotoFile=new File([fotoBlob],'registro.jpg',{type:'image/jpeg'});
+    navigator.share({title:'Registro Operacional',text:msg,files:[fotoFile]})
+    .then(()=>{resetarFoto();voltar('fotoView');})
+    .catch(err=>console.log('Compartilhamento cancelado'));
+  }else{
     alert('Foto capturada!\n\nPara enviar:\n1. Abra o WhatsApp\n2. Cole a mensagem\n3. Anexe a foto manualmente');
     navigator.clipboard.writeText(msg);
     resetarFoto();
@@ -1032,321 +971,302 @@ function enviarFoto() {
 }
 
 /* === APOIO === */
-function solicitarApoio() {
-  const vtVal = document.getElementById('apoioVt').value;
-  const condutor = document.getElementById('apoioCondutor').value;
-  const qthVal = document.getElementById('apoioQth').value;
-  const obs = document.getElementById('apoioObs').value.trim();
-  let msg = `Viatura equipe: ${condutor} VT: ${vtVal} solicita apoio em QTH: ${qthVal}`;
-  if (obs) msg += `\nObservação: ${obs}`;
-  const encoded = encodeURIComponent(msg);
-  window.location.href = `whatsapp://send?text=${encoded}`;
-  document.getElementById('apoioObs').value = '';
+function solicitarApoio(){
+  const vtVal=document.getElementById('apoioVt').value;
+  const condutor=document.getElementById('apoioCondutor').value;
+  const qthVal=document.getElementById('apoioQth').value;
+  const obs=document.getElementById('apoioObs').value.trim();
+  let msg=`Viatura equipe: ${condutor} VT: ${vtVal} solicita apoio em QTH: ${qthVal}`;
+  if(obs) msg+=`\nObservação: ${obs}`;
+  const encoded=encodeURIComponent(msg);
+  window.location.href=`whatsapp://send?text=${encoded}`;
+  document.getElementById('apoioObs').value='';
 }
 
-/* === RATT (REVEZAMENTO MELHORADO) === */
-let rattState = {
-  tempoCiclo: 30, modo: 2, equipe: [], cicloAtual: 0, grupos: [], iniciado: false, pausado: false,
-  tempoRestante: 0, tempoTotal: 0, intervalId: null, clockId: null, historico: [], turnoInicio: null, turnoFim: null
+/* === RATT (REVEZAMENTO) === */
+let rattState={
+  tempoCiclo:30,
+  modo:2,
+  equipe:[],
+  cicloAtual:0,
+  grupos:[],
+  iniciado:false,
+  pausado:false,
+  tempoRestante:0,
+  tempoTotal:0,
+  intervalId:null,
+  clockId:null,
+  historico:[],
+  turnoInicio:null,
+  turnoFim:null
 };
 
-function setTempoCiclo(minutos) {
-  rattState.tempoCiclo = minutos;
-  const tempoBotoes = document.querySelectorAll('#tempoToggleGroup .ratt-toggle-btn');
-  const valores = [20, 30, 60];
-  tempoBotoes.forEach((btn, i) => btn.classList.toggle('active', valores[i] === minutos));
+function setTempoCiclo(minutos){
+  rattState.tempoCiclo=minutos;
+  const tempoBotoes=document.querySelectorAll('#tempoToggleGroup .ratt-toggle-btn');
+  const valores=[20,30,60];
+  tempoBotoes.forEach((btn,i)=>btn.classList.toggle('active',valores[i]===minutos));
 }
 
-function setModo(operadores) {
-  rattState.modo = operadores;
-  const modoBotoes = document.querySelectorAll('#modoToggleGroup .ratt-toggle-btn');
-  modoBotoes.forEach((btn, i) => btn.classList.toggle('active', valorBotao === operadores));
+function setModo(operadores){
+  rattState.modo=operadores;
+  const modoBotoes=document.querySelectorAll('#modoToggleGroup .ratt-toggle-btn');
+  modoBotoes.forEach((btn,i)=>{
+    const valorBotao=i+1;
+    btn.classList.toggle('active',valorBotao===operadores);
+  });
 }
 
-function iniciarRATT() {
-  const inicio = document.getElementById('rattInicio').value;
-  const fim = document.getElementById('rattFim').value;
-  const equipeTexto = document.getElementById('rattEquipe').value.trim();
-  if (!inicio || !fim) { alert('Defina início e fim do turno'); return; }
-  if (!equipeTexto) { alert('Informe a equipe'); return; }
-  rattState.equipe = equipeTexto.split(',').map(n => n.trim().toUpperCase()).filter(n => n);
-  if (rattState.equipe.length < rattState.modo) {
-    alert(`É necessário ter pelo menos ${rattState.modo} operadores.`);
+function iniciarRATT(){
+  const inicio=document.getElementById('rattInicio').value;
+  const fim=document.getElementById('rattFim').value;
+  const equipeTexto=document.getElementById('rattEquipe').value.trim();
+  
+  if(!inicio||!fim){alert('Defina início e fim do turno');return;}
+  if(!equipeTexto){alert('Informe a equipe');return;}
+  
+  rattState.equipe=equipeTexto.split(',').map(n=>n.trim().toUpperCase()).filter(n=>n);
+  if(rattState.equipe.length<rattState.modo){
+    alert(`É necessário ter pelo menos ${rattState.modo} operadores na equipe.`);
     return;
   }
-  rattState.turnoInicio = inicio;
-  rattState.turnoFim = fim;
-  rattState.grupos = gerarGrupos(rattState.equipe, rattState.modo);
-  rattState.cicloAtual = 0;
-  rattState.tempoRestante = rattState.tempoCiclo * 60;
-  rattState.tempoTotal = rattState.tempoCiclo * 60;
-  rattState.iniciado = true;
-  rattState.pausado = false;
-  const btnPausa = document.getElementById('pausarRattBtn');
-  if (btnPausa) {
-    btnPausa.textContent = 'Pausar';
-    btnPausa.onclick = pausarRATT;
-  }
-  habilitarControlesRATT(true);
-  document.getElementById('turnoInicio').textContent = inicio;
-  document.getElementById('turnoFim').textContent = fim;
-  document.getElementById('rattConfig').style.display = 'none';
-  document.getElementById('rattDisplay').style.display = 'block';
+  
+  rattState.turnoInicio=inicio;
+  rattState.turnoFim=fim;
+  rattState.grupos=gerarGrupos(rattState.equipe,rattState.modo);
+  rattState.cicloAtual=0;
+  rattState.tempoRestante=rattState.tempoCiclo*60;
+  rattState.tempoTotal=rattState.tempoCiclo*60;
+  rattState.iniciado=true;
+  rattState.pausado=false;
+  
+  document.getElementById('turnoInicio').textContent=inicio;
+  document.getElementById('turnoFim').textContent=fim;
+  document.getElementById('rattConfig').style.display='none';
+  document.getElementById('rattDisplay').style.display='block';
+  
   renderizarOperadores();
   atualizarDisplayRATT();
-  atualizarProgressoTurno();
   iniciarTimers();
 }
 
-function gerarGrupos(equipe, tamanho) {
-  const grupos = [];
-  if (equipe.length === 0) return grupos;
-  for (let i = 0; i < equipe.length; i++) {
-    const grupo = [];
-    for (let j = 0; j < tamanho; j++) {
-      grupo.push(equipe[(i + j) % equipe.length]);
+function gerarGrupos(equipe,tamanho){
+  const grupos=[];
+  for(let i=0;i<equipe.length;i++){
+    const grupo=[];
+    for(let j=0;j<tamanho;j++){
+      grupo.push(equipe[(i+j)%equipe.length]);
     }
     grupos.push(grupo);
   }
   return grupos;
 }
 
-function renderizarOperadores() {
-  const container = document.getElementById('operatorsGrid');
-  container.innerHTML = '';
-  rattState.equipe.forEach((op, idx) => {
-    const card = document.createElement('div');
-    card.className = 'operator-card';
-    card.id = `op-${idx}`;
-    const inicial = op.charAt(0);
-    card.innerHTML = `<div class="operator-icon">${inicial}</div><div class="operator-info"><div class="operator-name">${op}</div><div class="operator-status">Aguardando...</div></div>`;
+function renderizarOperadores(){
+  const container=document.getElementById('operatorsGrid');
+  container.innerHTML='';
+  
+  rattState.equipe.forEach((op,idx)=>{
+    const card=document.createElement('div');
+    card.className='operator-card';
+    card.id=`op-${idx}`;
+    
+    const inicial=op.charAt(0);
+    card.innerHTML=`
+      <div class="operator-icon">${inicial}</div>
+      <div class="operator-info">
+        <div class="operator-name">${op}</div>
+        <div class="operator-status">Aguardando...</div>
+      </div>
+    `;
+    
     container.appendChild(card);
   });
 }
 
-function atualizarDisplayRATT() {
-  if (rattState.grupos.length === 0) return;
-  const grupoAtual = rattState.grupos[rattState.cicloAtual % rattState.grupos.length];
-  rattState.equipe.forEach((op, idx) => {
-    const card = document.getElementById(`op-${idx}`);
-    if (!card) return;
-    const status = card.querySelector('.operator-status');
-    if (grupoAtual.includes(op)) {
+function atualizarDisplayRATT(){
+  if(rattState.grupos.length===0) return;
+  
+  const grupoAtual=rattState.grupos[rattState.cicloAtual%rattState.grupos.length];
+  
+  rattState.equipe.forEach((op,idx)=>{
+    const card=document.getElementById(`op-${idx}`);
+    if(!card) return;
+    const status=card.querySelector('.operator-status');
+    
+    if(grupoAtual.includes(op)){
       card.classList.add('active');
-      status.textContent = 'Em Campo';
-    } else {
+      status.textContent='Em Campo';
+    }else{
       card.classList.remove('active');
-      status.textContent = 'Descansando';
+      status.textContent='Descansando';
     }
   });
+  
   atualizarTimer();
   atualizarProgressoTurno();
 }
 
-function iniciarTimers() {
-  clearInterval(rattState.clockId);
-  clearInterval(rattState.intervalId);
-  rattState.clockId = setInterval(atualizarProgressoTurno, 1000);
-  rattState.intervalId = setInterval(() => {
-    if (rattState.iniciado && !rattState.pausado && rattState.tempoRestante > 0) {
+function iniciarTimers(){
+  if(rattState.clockId) clearInterval(rattState.clockId);
+  if(rattState.intervalId) clearInterval(rattState.intervalId);
+  
+  rattState.clockId=setInterval(()=>{
+    atualizarProgressoTurno();
+  },1000);
+  
+  rattState.intervalId=setInterval(()=>{
+    if(!rattState.pausado && rattState.tempoRestante>0){
       rattState.tempoRestante--;
       atualizarTimer();
-      if (rattState.tempoRestante === 0) alertaRevezamento();
+      if(rattState.tempoRestante===0){
+        alertaRevezamento();
+      }
     }
-  }, 1000);
+  },1000);
 }
 
-function atualizarTimer() {
-  const m = Math.floor(rattState.tempoRestante / 60);
-  const s = rattState.tempoRestante % 60;
-  document.getElementById('rattTimer').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-  const progresso = (rattState.tempoRestante / rattState.tempoTotal) * 565.48;
-  document.getElementById('timerCircle').style.strokeDashoffset = 565.48 - progresso;
+function atualizarTimer(){
+  const m=Math.floor(rattState.tempoRestante/60);
+  const s=rattState.tempoRestante%60;
+  document.getElementById('rattTimer').textContent=
+    `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  
+  const progresso=(rattState.tempoRestante/rattState.tempoTotal)*565.48;
+  document.getElementById('timerCircle').style.strokeDashoffset=565.48-progresso;
 }
 
-function atualizarProgressoTurno() {
-  const agora = new Date();
-  document.getElementById('turnoAtual').textContent = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  const [hInicio, mInicio] = rattState.turnoInicio.split(':').map(Number);
-  let [hFim, mFim] = rattState.turnoFim.split(':').map(Number);
-  const minInicio = hInicio * 60 + mInicio;
-  let minFim = hFim * 60 + mFim;
-  if (minFim < minInicio) minFim += 24 * 60;
-  const minAtual = agora.getHours() * 60 + agora.getMinutes();
-  let progresso = 0;
-  if (minAtual >= minInicio && minAtual <= minFim) {
-    progresso = ((minAtual - minInicio) / (minFim - minInicio)) * 100;
-  } else if (minAtual > minFim) {
-    progresso = 100;
+function atualizarProgressoTurno(){
+  const agora=new Date();
+  const horaAtual=agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('turnoAtual').textContent=horaAtual;
+  
+  const [hInicio,mInicio]=rattState.turnoInicio.split(':').map(Number);
+  const [hFim,mFim]=rattState.turnoFim.split(':').map(Number);
+  const [hAtual,mAtual]=[agora.getHours(),agora.getMinutes()];
+  
+  const minInicio=hInicio*60+mInicio;
+  const minFim=hFim*60+mFim;
+  const minAtual=hAtual*60+mAtual;
+  
+  let progresso=0;
+  if(minAtual>=minInicio && minAtual<=minFim){
+    progresso=((minAtual-minInicio)/(minFim-minInicio))*100;
+  }else if(minAtual>minFim){
+    progresso=100;
   }
-  document.getElementById('turnoProgressBar').style.width = `${progresso}%`;
+  
+  document.getElementById('turnoProgressBar').style.width=`${progresso}%`;
 }
 
-function alertaRevezamento() {
-  try { navigator.vibrate?.([500, 100, 500]); } catch (e) {}
-  if (confirm('⏰ Tempo esgotado! Revezar agora?')) {
+function alertaRevezamento(){
+  try{navigator.vibrate?.([500,100,500]);}catch(e){}
+  if(confirm('⏰ Tempo esgotado! Revezar agora?')){
     revezarRATT();
-  } else {
-    rattState.tempoRestante = rattState.tempoCiclo * 60;
-    rattState.tempoTotal = rattState.tempoCiclo * 60;
-    atualizarTimer();
+  }else{
+    rattState.tempoRestante=rattState.tempoCiclo*60;
   }
 }
 
-function habilitarControlesRATT(habilitar) {
-  const btnRevezar = document.getElementById('revezarBtn');
-  const btnAdd = document.getElementById('addBtn');
-  const btnRemove = document.getElementById('removeBtn');
-  [btnRevezar, btnAdd, btnRemove].forEach(btn => {
-    if (btn) {
-      btn.disabled = !habilitar;
-      btn.style.opacity = habilitar ? '1' : '0.4';
-      btn.style.pointerEvents = habilitar ? 'auto' : 'none';
-    }
+function revezarRATT(){
+  rattState.historico.push({
+    ciclo:rattState.cicloAtual,
+    grupo:rattState.grupos[rattState.cicloAtual%rattState.grupos.length],
+    hora:new Date().toLocaleTimeString('pt-BR')
   });
-}
-
-function revezarRATT() {
-  if (!rattState.iniciado || rattState.pausado) return;
-  rattState.historico.push({ ciclo: rattState.cicloAtual, grupo: rattState.grupos[rattState.cicloAtual % rattState.grupos.length], hora: new Date().toLocaleTimeString('pt-BR') });
   rattState.cicloAtual++;
-  rattState.tempoRestante = rattState.tempoCiclo * 60;
-  rattState.tempoTotal = rattState.tempoCiclo * 60;
+  rattState.tempoRestante=rattState.tempoCiclo*60;
   atualizarDisplayRATT();
-  try { navigator.vibrate?.(100); } catch (e) {}
+  try{navigator.vibrate?.(100);}catch(e){}
 }
 
-function pausarRATT() {
-  if (!rattState.iniciado) return;
-  rattState.pausado = !rattState.pausado;
-  const btnPausa = document.getElementById('pausarRattBtn');
-  const timerDisplay = document.getElementById('rattTimer');
-  if (rattState.pausado) {
-    btnPausa.textContent = 'Retomar';
-    timerDisplay.style.opacity = '0.5';
-    habilitarControlesRATT(false);
-  } else {
-    btnPausa.textContent = 'Pausar';
-    timerDisplay.style.opacity = '1';
-    habilitarControlesRATT(true);
+function pausarRATT(){
+  rattState.pausado=!rattState.pausado;
+  const btn=document.getElementById('pausarRattBtn');
+  btn.textContent=rattState.pausado?'Retomar':'Pausar';
+  
+  const timer=document.getElementById('rattTimer');
+  if(rattState.pausado){
+    timer.style.opacity='0.5';
+  }else{
+    timer.style.opacity='1';
   }
 }
 
-function adicionarOperadorDuranteRATT() {
-  if (!rattState.iniciado || rattState.pausado) return;
-  const nome = prompt('👤 Nome do operador a adicionar:');
-  if (!nome || !nome.trim()) return;
-  const novoNome = nome.trim().toUpperCase();
-  if (rattState.equipe.includes(novoNome)) { alert('⚠️ Este operador já está na lista.'); return; }
-  rattState.equipe.push(novoNome);
-  rattState.grupos = gerarGrupos(rattState.equipe, rattState.modo);
-  renderizarOperadores();
-  atualizarDisplayRATT();
-  try { navigator.vibrate?.(30); } catch (e) {}
-  alert(`✅ ${novoNome} adicionado ao revezamento.`);
-}
-
-function removerOperadorDuranteRATT() {
-  if (!rattState.iniciado || rattState.pausado) return;
-  if (rattState.equipe.length <= rattState.modo) { alert(`❌ Não é possível remover. A equipe precisa ter no mínimo ${rattState.modo} operadores.`); return; }
-  const nome = prompt('👤 Digite o nome do operador a remover:');
-  if (!nome) return;
-  const nomeUp = nome.trim().toUpperCase();
-  const idx = rattState.equipe.indexOf(nomeUp);
-  if (idx === -1) { alert('❌ Operador não encontrado.'); return; }
-  if (confirm(`Remover ${nomeUp} do revezamento?`)) {
-    rattState.equipe.splice(idx, 1);
-    rattState.grupos = gerarGrupos(rattState.equipe, rattState.modo);
-    renderizarOperadores();
-    atualizarDisplayRATT();
-    try { navigator.vibrate?.(40); } catch (e) {}
+function abrirConfigRATT(){
+  if(!rattState.iniciado){
+    alert('⚠️ Inicie o revezamento primeiro');
+    return;
+  }
+  
+  const novoTempo=prompt('⏱️ Novo tempo por ciclo (minutos):\n\nOpções: 20, 30 ou 60',rattState.tempoCiclo);
+  if(novoTempo){
+    const tempo=parseInt(novoTempo);
+    if([20,30,60].includes(tempo)){
+      rattState.tempoCiclo=tempo;
+      rattState.tempoRestante=tempo*60;
+      rattState.tempoTotal=tempo*60;
+      alert(`✅ Tempo alterado para ${tempo} minutos`);
+      atualizarTimer();
+    }else{
+      alert('❌ Valor inválido. Use 20, 30 ou 60');
+    }
+  }
+  
+  const novoModo=prompt('👥 Quantos operadores por vez?\n\nOpções: 1, 2 ou 3',rattState.modo);
+  if(novoModo){
+    const modo=parseInt(novoModo);
+    if([1,2,3].includes(modo) && rattState.equipe.length>=modo){
+      rattState.modo=modo;
+      rattState.grupos=gerarGrupos(rattState.equipe,modo);
+      rattState.cicloAtual=0;
+      alert(`✅ Modo alterado para ${modo} operador(es) por vez`);
+      atualizarDisplayRATT();
+    }else{
+      alert(`❌ Valor inválido ou equipe insuficiente`);
+    }
   }
 }
 
-// CORREÇÃO DA INTEGRAÇÃO: Função 'encerrarRATT' agora aceita um parâmetro
-function encerrarRATT(perguntar = true) {
-  if (!perguntar || confirm('🛑 Encerrar revezamento? O histórico será salvo.')) {
+function encerrarRATT(){
+  if(confirm('🛑 Encerrar revezamento? O histórico será salvo.')){
     clearInterval(rattState.intervalId);
     clearInterval(rattState.clockId);
-    rattState.iniciado = false;
-    rattState.pausado = false;
-    const btnPausa = document.getElementById('pausarRattBtn');
-    if (btnPausa) btnPausa.textContent = 'Pausar';
-    habilitarControlesRATT(true);
-    document.getElementById('rattConfig').style.display = 'block';
-    document.getElementById('rattDisplay').style.display = 'none';
+    rattState.iniciado=false;
+    document.getElementById('rattConfig').style.display='block';
+    document.getElementById('rattDisplay').style.display='none';
     salvarHistoricoRATT();
   }
 }
 
-function salvarHistoricoRATT() {
-  const data = new Date().toISOString().split('T')[0];
-  const hist = JSON.parse(localStorage.getItem('ratt_historico') || '[]');
-  hist.push({ data: data, turno: `${rattState.turnoInicio}-${rattState.turnoFim}`, ciclos: rattState.historico, equipe: rattState.equipe, modo: rattState.modo, tempoCiclo: rattState.tempoCiclo });
-  localStorage.setItem('ratt_historico', JSON.stringify(hist.slice(-7)));
-  rattState.historico = [];
+function salvarHistoricoRATT(){
+  const data=new Date().toISOString().split('T')[0];
+  const hist=JSON.parse(localStorage.getItem('ratt_historico')||'[]');
+  hist.push({
+    data:data,
+    turno:`${rattState.turnoInicio}-${rattState.turnoFim}`,
+    ciclos:rattState.historico,
+    equipe:rattState.equipe,
+    modo:rattState.modo,
+    tempoCiclo:rattState.tempoCiclo
+  });
+  localStorage.setItem('ratt_historico',JSON.stringify(hist.slice(-7)));
+  rattState.historico=[];
 }
 
-// CORREÇÃO DA INTEGRAÇÃO: 'espelharQTAnoRATT' agora chama o encerramento
-function espelharQTAnoRATT(dadosQTA) {
-  if (rattState && rattState.iniciado) {
-    rattState.historico.push({ ciclo: rattState.cicloAtual, tipo: 'QTA', dados: dadosQTA, hora: new Date().toLocaleTimeString('pt-BR') });
-    alert('📡 QTA recebido. Encerrando o revezamento ativo...');
-    console.log(`🟣 QTA espelhado no RATT. Iniciando encerramento...`, dadosQTA);
-    encerrarRATT(false); // Chama o encerramento sem perguntar novamente
-  }
-}
-
-function preencherRATTcomQRV() {
-  try {
-    const dadosQRV = JSON.parse(localStorage.getItem('qrv_ultimo') || 'null');
-    if (!dadosQRV) return;
-    const equipeField = document.getElementById('rattEquipe');
-    if (!equipeField.value.trim()) {
-      equipeField.value = dadosQRV.equipe || '';
+function preencherRATTcomQRV(){
+  try{
+    const dadosQRV=JSON.parse(localStorage.getItem('qrv_ultimo')||'null');
+    if(!dadosQRV) return;
+    const equipeField=document.getElementById('rattEquipe');
+    if(!equipeField.value.trim()){
+      equipeField.value=dadosQRV.equipe||'';
     }
-  } catch (e) { console.warn('Não foi possível carregar dados do QRV:', e); }
+  }catch(e){
+    console.warn('Não foi possível carregar dados do QRV:',e);
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const qrvForm = document.getElementById('qrvForm');
-  if (!document.getElementById('qtaBtn')) {
-    const qtaContainer = document.createElement('div');
-    qtaContainer.className = 'send-area';
-    const qtaBtn = document.createElement('button');
-    qtaBtn.id = 'qtaBtn';
-    qtaBtn.type = 'button';
-    qtaBtn.className = 'ratt-btn ratt-btn-secondary';
-    qtaBtn.textContent = 'Encerrar Ciclo (QTA)';
-    qtaBtn.onclick = encerrarQTA;
-    qtaContainer.appendChild(qtaBtn);
-    qrvForm.appendChild(qtaContainer);
-  }
-  const rattConfig = document.getElementById('rattConfig');
-  if (rattConfig && !document.getElementById('addOpConfigBtn')) {
-    const addBtnContainer = document.createElement('div');
-    addBtnContainer.className = 'send-area';
-    const addBtn = document.createElement('button');
-    addBtn.id = 'addOpConfigBtn';
-    addBtn.type = 'button';
-    addBtn.className = 'ratt-btn ratt-btn-secondary';
-    addBtn.textContent = '+ Adicionar Operador';
-    addBtn.onclick = () => {
-      const nome = prompt('👤 Nome do operador a adicionar:');
-      if (!nome || !nome.trim()) return;
-      const campoEquipe = document.getElementById('rattEquipe');
-      const listaAtual = campoEquipe.value.trim();
-      const novoNome = nome.trim().toUpperCase();
-      if (listaAtual.includes(novoNome)) { alert('⚠️ Este operador já está na lista.'); return; }
-      campoEquipe.value = listaAtual ? `${listaAtual}, ${novoNome}` : novoNome;
-      try { navigator.vibrate?.(30); } catch (e) {}
-      alert(`✅ ${novoNome} adicionado à equipe.`);
-    };
-    addBtnContainer.appendChild(addBtn);
-    rattConfig.appendChild(addBtnContainer);
-  }
-});
 </script>
-
 </body>
 </html>
